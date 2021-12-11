@@ -42,12 +42,11 @@ def shortest_simplest_path(
 
     Returns
     -------
-    list_paths0 : contains the list of sequence nodes on the fastest simplest
+    list_paths0 : the fastest simplest
     path.
-    list_pathsturns0 : the edge list along the fastest simplest path in
-    list_paths.
-    E : the entropy needed to locate the fastest simplest path in list_paths in
-    the information network.
+    list_pathsturns0 : the transfer stations along the fastest simplest path.
+    E : the entropy needed to locate the fastest simplest path in the 
+    information network.
     duration : the travel time of the fastest simplest path.
     distance : the travel distance of the fastest simplest path.
 
