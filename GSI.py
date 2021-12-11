@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Functions for calculating global search information (GSI) according to ref [1]
+Functions for calculating global search information (GSI) according to ref. [1]
 (in Results section 2, 3)
 
 [1] Gallotti, R., Porter,  M.  A.  & Barthelemy, M. Lost in transportation:
