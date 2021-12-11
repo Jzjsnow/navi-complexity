@@ -310,13 +310,15 @@ def merge_2_st_const_width(
     matrix_Ktot_st_sub = np.zeros((mat_width, mat_width)) * np.nan
     for i in range(0, len(list_nid)):
         for j in range(0, len(list_nid)):
-            list_S = matrix_Ss[np.array(list_sids[i]) - 1, :]
-            list_S = list_S[:, np.array(list_sids[j]) - 1]
-            list_nlines = matrix_nroutes[np.array(list_sids[i]) - 1, :]
-            list_nlines = list_nlines[:, np.array(list_sids[j]) - 1]
+            list_sid1 = np.array(list_sids[i]) - 1
+            list_sid2 = np.array(list_sids[j]) - 1
+            list_S = matrix_Ss[list_sid1, :]
+            list_S = list_S[:, list_sid2]
+            list_nlines = matrix_nroutes[list_sid1, :]
+            list_nlines = list_nlines[:, list_sid2]
             if(matrix_Ktot_sub is not None):
-                list_Ktot = matrix_Ktot_sub[np.array(list_sids[i]) - 1, :]
-                list_Ktot = list_Ktot[:, np.array(list_sids[j]) - 1]
+                list_Ktot = matrix_Ktot_sub[list_sid1, :]
+                list_Ktot = list_Ktot[:, list_sid2]
                 list_Ktot = list_Ktot[list_nlines > 0]
             list_S = list_S[list_nlines > 0]
             list_nlines = list_nlines[list_nlines > 0]
