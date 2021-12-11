@@ -283,14 +283,14 @@ def merge_2_st_matching(
                     matrix_S_nid[list_nid[i] - 1][list_nid[j] - 1] = np.sum(
                         list_S * list_count) / np.sum(list_count[list_nlines > 0])
                 else:
-                    matrix_S_nid[list_nid[i] - 1][list_nid[j] - 1] = \ 
+                    matrix_S_nid[list_nid[i] - 1][list_nid[j] - 1] = \
                         np.sum(list_S) / list_S.size
             else:
                 list_S = list_S[(list_nlines > 0) & (list_nlines == thres_C + 1)]
 
                 if(count_weighted):
                     list_count = list_count[(list_nlines > 0) & (list_nlines == thres_C + 1)]
-                    matrix_S_nid[list_nid[i] - 1][list_nid[j] - 1] = \ 
+                    matrix_S_nid[list_nid[i] - 1][list_nid[j] - 1] = \
                         np.sum(list_S * list_count) / np.sum(list_count)
                 else:
                     matrix_S_nid[list_nid[i] - 1][list_nid[j] - 1] = \
