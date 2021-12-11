@@ -42,8 +42,7 @@ def shortest_simplest_path(
 
     Returns
     -------
-    list_paths0 : the fastest simplest
-    path.
+    list_paths0 : the fastest simplest path.
     list_pathsturns0 : the transfer stations along the fastest simplest path.
     E : the entropy needed to locate the fastest simplest path in the 
     information network.
