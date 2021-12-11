@@ -1,0 +1,311 @@
+# -*- coding: utf-8 -*-
+"""
+Functions for calculating LSI from k shortest paths (in Results section 3)
+Steps:
+    1. Construct the sub-network for an OD station pair based on k shortest paths.
+    2. Calculate the entropy of the fastest simplest path (among the k paths) 
+    between the OD stations.
+    3. The entropy of the fastest simplest path is the station-level LSI of the
+    OD stations.
+    3. Get the line-level LSI by aggregating the entropy of all the matched paths
+    between line pairs.
+
+"""
+import networkx as nx
+import numpy as np
+import pandas as pd
+from networkx.classes.function import path_weight
+from funcs import *
+from iofiles import *
+
+
+def get_sub_dualG_relabeled(G, dualG_nodes, dualG_edges):
+    """
+    Map the input subway's sub-network G to an information network.
+
+    Parameters
+    ----------
+    G : the (sub-)network to map.
+    dualG_nodes : the total nodes in the global information network.
+    dualG_edges : the total edges in the global information network.
+
+    Returns
+    -------
+    dualG : the local information network transformed from the sub-network G.
+    dualG_nodes_sub : the list of nodes in dualG.
+    dualG_edges_sub : the list of edges in dualG.
+
+    """
+    H = G.to_undirected()
+    dualG_nodes_sub = [x for x in dualG_nodes if x[0] in list(
+        set([key for u, v, key in H.edges(keys=True)]))]
+    dualG_edges_sub = []
+    for sid in H.nodes():
+        incident_lines = list(set([int(y.split('-')[0])
+                                   for y in list(H[sid])]))
+        sid = int(sid.split('-')[1])
+        if(len(incident_lines) > 1):  # sid: transfer station
+            add_edges = [x for x in dualG_edges if x[2] == sid 
+                         and x[0] in incident_lines 
+                         and x[1] in incident_lines 
+                         and x not in dualG_edges_sub]
+            dualG_edges_sub = dualG_edges_sub + add_edges
+    dualG = nx.MultiGraph()
+    dualG.add_nodes_from(dualG_nodes_sub)
+    keys = dualG.add_edges_from(dualG_edges_sub)
+    return dualG, dualG_nodes_sub, dualG_edges_sub
+
+
+def shortest_simplest_path_sub(
+        o_label,
+        d_label,
+        G_relabeled,
+        dualG,
+        dualG_nodes,
+        dualG_edges,
+        kmax):
+    """
+    Get the entropy of finding the fastest simplest path in kmax shortest paths
+    between stations o_label and d_label.
+
+    Parameters
+    ----------
+    o_label : the origin station identified by the string of "lineid-stationid".
+    d_label : the destination station identified by the string of "lineid-
+    stationid".
+    G_relabeled : the networkx graph of the subway network.
+    dualG : the networkx graph of the information network.
+    dualG_nodes : the list of nodes in dualG.
+    dualG_edges : the list of edges in dualG.
+    kmax : the number of the shortest paths that construct the sub-network.
+
+    Returns
+    -------
+    [list_lines_min] : contains the list of node sequence on the fastest
+    simplest path.
+    list_pathturns_min : the edge list along the fastest simplest path in
+    list_paths.
+    E_k : the entropy needed to locate the fastest simplest path in list_paths
+    in the local information network tranformed from the sub-network.
+    duration : the travel time of the fastest simplest path.
+    distance : the travel distance of the fastest simplest path.
+    N_Ktot_k : the number of connections in the sub-network.
+
+    """
+    list_paths = []  # sequence of stops
+    k = 0
+    for path in k_shortest_paths(
+            nx.DiGraph(G_relabeled),
+            o_label,
+            d_label,
+            kmax,
+            weight='duration'):
+        k += 1
+
+        list_paths.append(path)
+        paths = [key for i in range(0, len(
+            path) - 1) for key in G_relabeled.get_edge_data(path[i], path[i + 1]).keys()]  # line id
+
+        list_lines = [paths[i] for i in range(len(paths)) if (
+            i == 0 or i > 0 and paths[i] != paths[i - 1])and paths[i] != 0]
+        list_pathturns = [path[i] for i in range(
+            len(paths)) if i > 0 and paths[i] != paths[i - 1]]
+
+        # get the sub-network and network attributes
+        G_sub = G_relabeled.subgraph(
+            list(set([x for j in list_paths for x in j]))).copy()
+
+        duration0 = path_weight(G_sub, path, weight='duration')
+        distance0 = path_weight(G_sub, path, weight='distance')
+        len_path0 = len(list_lines)  # number of lines on the path
+
+        # If the k-th shortest path is a path with fewer transfers/with the same
+        # number of transfers as previous simplest path but a shorter distance,
+        # then the fastest simplest path is updated to this path
+        if(k == 1 or
+           len_path0 < len_path or
+           len_path0 == len_path and duration0 < duration or
+           len_path0 == len_path and duration0 == duration and distance0 < distance
+           ):
+            duration = duration0
+            distance = distance0
+            len_path = len_path0
+            list_lines_min = list_lines
+            list_pathturns_min = list_pathturns
+
+
+    dualG_sub, dualG_nodes_sub, dualG_edges_sub = get_sub_dualG_relabeled(
+        G_sub, dualG_nodes, dualG_edges)
+    N_Ktot_k = len(dualG_sub.edges()) 
+    E_k = cal_entropy_in_dualG([list_lines_min], dualG_sub)
+
+    return [list_lines_min], list_pathturns_min, E_k, duration, distance, N_Ktot_k
+
+
+def subnetwork_analysis(
+        G_relabeled,
+        dualG,
+        dualG_nodes,
+        dualG_edges,
+        mat_width,
+        k,
+        filename='dual_log.txt'):
+    """
+    Get the station-level LSI.
+    The station-level LSI measures the information needed to locate the fastest
+    simplest paths in the sub-networks between station pairs
+
+    Parameters
+    ----------
+    G_relabeled : the subway network.
+    dualG : the networkx graph of the information network.
+    dualG_nodes : the list of nodes in the dualG.
+    dualG_edges : the list of edges in dualG.
+    mat_width : the width of the result matrix.
+    k : the number of the shortest paths that construct the sub-network.
+    filename : output log name. The default is ''.
+    
+    Returns
+    -------
+    matrix_S : the LSI between each station pair.
+    matrix_nroutes : the number of lines included in the fastest simplest path
+    of each station pair.
+    matrix_pathlength : the travel time of the fastest simplest path of each
+    station pair.
+    matrix_pathdist : the travel distance of the fastest simplest path of each
+    station pair.
+    matrix_Ktot: the number of connections in the sub-networks of each station
+    pair.
+
+    """
+
+    S = 0  # average search information
+    matrix_S = np.zeros((mat_width, mat_width)) - 1
+    matrix_pathlength = np.zeros((mat_width, mat_width)) - 1
+    matrix_pathdist = np.zeros((mat_width, mat_width)) - 1
+    matrix_nroutes = np.zeros((mat_width, mat_width)) - 1
+    matrix_Ktot = np.zeros((mat_width, mat_width)) - 1
+    counts = 0
+    process = 0
+
+    list_nodes = G_relabeled.nodes()
+
+    for o_label in G_relabeled.nodes:
+        for d_label in G_relabeled.nodes:
+            counts += 1
+            if(int((10 * counts) / (len(list_nodes) * len(list_nodes))) > process):
+                process = int((10 * counts) /
+                              (len(list_nodes) * len(list_nodes)))
+                with open(filename, "a") as f:
+                    print(
+                        'processing %.2f %%' %
+                        (counts * 100 / len(list_nodes) / len(list_nodes)), file=f)
+                print('processing %.2f %%'
+                      % (counts * 100 / len(list_nodes) / len(list_nodes)))
+            try:
+                i_s = [int(o_label.split('-')[1]), int(o_label.split('-')[0])]
+                j_t = [int(d_label.split('-')[1]), int(d_label.split('-')[0])]
+                list_paths, list_pathsturns, E, length, dist, N_Ktot_k = shortest_simplest_path_sub(
+                    o_label, d_label, G_relabeled, dualG, dualG_nodes, dualG_edges, k)
+
+                # number of routes in the shortest path
+                nroutes = len(list_paths[0])
+
+                # Store the results of each pair of stations in a matrix with
+                # subscripts
+                is_update = False
+                # If the OD stations have not been calculated, record directly
+                if(matrix_pathlength[i_s[0] - 1][j_t[0] - 1] < 0):
+                    is_update = True
+
+                # Update if the new path has fewer transfers
+                elif(matrix_nroutes[i_s[0] - 1][j_t[0] - 1] > nroutes):
+                    is_update = True
+
+                # Update if the new path is shorter in time
+                elif(matrix_nroutes[i_s[0] - 1][j_t[0] - 1] == nroutes 
+                     and matrix_pathlength[i_s[0] - 1][j_t[0] - 1] > length):
+                    is_update = True
+
+                # Update if the new path is shorter in distance
+                elif(matrix_nroutes[i_s[0] - 1][j_t[0] - 1] == nroutes 
+                     and matrix_pathlength[i_s[0] - 1][j_t[0] - 1] == length
+                     and matrix_pathdist[i_s[0] - 1][j_t[0] - 1] > dist):
+                    is_update = True
+
+                if(is_update):
+                    matrix_S[i_s[0] - 1][j_t[0] - 1] = E
+                    matrix_pathlength[i_s[0] - 1][j_t[0] - 1] = length
+                    matrix_pathdist[i_s[0] - 1][j_t[0] - 1] = dist
+                    matrix_nroutes[i_s[0] - 1][j_t[0] - 1] = nroutes
+                    matrix_Ktot[i_s[0] - 1][j_t[0] - 1] = N_Ktot_k
+            except Exception as e:
+                with open(filename, "a") as f:
+                    print('(%s,%s): %s'
+                          % (o_label, d_label, e), file=f)
+
+    return matrix_S, matrix_nroutes, matrix_pathlength, matrix_pathdist, matrix_Ktot
+
+
+def get_LSI_snapshot(mat_width, snapshot, kmax, suffix):
+    """
+    Get the station-level LSI and line-level GSI under each time snapshot and
+    save the results
+
+    Parameters
+    ----------
+    mat_width : width of result matrix (station-level search information).
+    snapshot : string of a specific year.
+
+
+    """
+    [G_sub, dualG_sub, dualG_nodes_sub, dualG_edges_sub] = \
+        load_variable('src_data/networks/data_G_bj_' + snapshot)
+    print(snapshot, 'data', 'loaded')
+
+    matrix_Ss_sub, matrix_nroutes_sub, matrix_pathlength_sub, matrix_pathdist_sub, matrix_Ktot_sub = subnetwork_analysis(
+        G_sub, dualG_sub, dualG_nodes_sub, dualG_edges_sub, mat_width, kmax, filename="log/log.txt")
+
+    matrix_S_sub_nid, matrix_Ktot_st_sub = merge_2_st_const_width(
+        G_sub, matrix_Ss_sub, matrix_nroutes_sub, mat_width, thres_C=None, matrix_Ktot_sub=matrix_Ktot_sub)
+    matrix_S_sub_nid_C1, matrix_Ktot_st_C1_sub = merge_2_st_const_width(
+        G_sub, matrix_Ss_sub, matrix_nroutes_sub, mat_width, thres_C=1, matrix_Ktot_sub=matrix_Ktot_sub)
+    matrix_S_sub_nid_C2, matrix_Ktot_st_C2_sub = merge_2_st_const_width(
+        G_sub, matrix_Ss_sub, matrix_nroutes_sub, mat_width, thres_C=2, matrix_Ktot_sub=matrix_Ktot_sub)
+    matrix_S_sub_nid_C3, matrix_Ktot_st_C3_sub = merge_2_st_const_width(
+        G_sub, matrix_Ss_sub, matrix_nroutes_sub, mat_width, thres_C=3, matrix_Ktot_sub=matrix_Ktot_sub)
+
+    save_variable([matrix_Ss_sub,
+                   matrix_nroutes_sub,
+                   matrix_pathlength_sub,
+                   matrix_pathdist_sub,
+                   matrix_Ktot_sub,
+                   matrix_S_sub_nid,
+                   matrix_Ktot_st_sub,
+                   matrix_S_sub_nid_C1,
+                   matrix_Ktot_st_C1_sub,
+                   matrix_S_sub_nid_C2,
+                   matrix_Ktot_st_C2_sub,
+                   matrix_S_sub_nid_C3,
+                   matrix_Ktot_st_C3_sub,
+                   ],
+                  'output/LSI/ksp_' + str(kmax) + '_bj_' + suffix)
+    print('save in', 'output/LSI/ksp_' + str(kmax) + '_bj_' + suffix)
+
+
+if __name__ == "__main__":
+
+    # import network data
+    [timeline, list_city, city_idx, city, city_abbr,
+     G, G_relabeled, dualG, dualG_nodes, dualG_nodes_en, dualG_edges,
+     node_pos_proj, node_pos_proj_relabeled, line_pos
+     ] = load_variable('src_data/initial_info')
+
+    max_line_id = max(node[0] for node in dualG_nodes)
+    mat_width = max(G.nodes)
+
+    # get LSI under each snapshot and save the results
+    for snapshot in timeline:
+        get_LSI_snapshot(mat_width, snapshot, 7, snapshot)
+        get_LSI_snapshot(mat_width, snapshot, 9, snapshot)
+        get_LSI_snapshot(mat_width, snapshot, 15, snapshot)
