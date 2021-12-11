@@ -200,8 +200,7 @@ def merge_2_ij_matching(df_matched_paths):
     
     """
     df_Ss_i_j = df_matched_paths.groupby(
-        [
-            'i', 'j'], as_index=False) .apply(
+        ['i', 'j'], as_index=False) .apply(
         lambda x: pd.Series(
             [
                 np.sum(
