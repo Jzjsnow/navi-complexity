@@ -306,6 +306,6 @@ if __name__ == "__main__":
 
     # get LSI under each snapshot and save the results
     for snapshot in timeline:
-        get_LSI_snapshot(mat_width, snapshot, 7, snapshot)
-        get_LSI_snapshot(mat_width, snapshot, 9, snapshot)
-        get_LSI_snapshot(mat_width, snapshot, 15, snapshot)
+        get_LSI_snapshot(mat_width, snapshot, 7, snapshot + '.pkl')
+        get_LSI_snapshot(mat_width, snapshot, 9, snapshot + '.pkl')
+        get_LSI_snapshot(mat_width, snapshot, 15, snapshot + '.pkl')

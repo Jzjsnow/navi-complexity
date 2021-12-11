@@ -333,7 +333,7 @@ if __name__ == "__main__":
 
     # save
     save_variable([df_matched_paths, df_Ss_i_j],
-                  'output/LSI/res_stationlevel_bj_card_' + suffix)
+                  'output/LSI/res_stationlevel_bj_card_' + suffix + '.pkl')
 
     # calculate the line-level LSI
     matrix_S_sub_nid = merge_2_st_matching(
@@ -361,4 +361,4 @@ if __name__ == "__main__":
                    matrix_S_sub_nid_C1,
                    matrix_S_sub_nid_C2,
                    matrix_S_sub_nid_C3,
-                   ], 'output/LSI/res_linelevel_card_' + suffix)
+                   ], 'output/LSI/res_linelevel_card_' + suffix + '.pkl')

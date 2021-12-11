@@ -231,7 +231,7 @@ def get_GSI_snapshot(mat_width, snapshot):
                    matrix_S_nid_C1,
                    matrix_S_nid_C2,
                    matrix_S_nid_C3],
-                  'output/GSI/bj_' + snapshot)
+                  'output/GSI/bj_' + snapshot + '.pkl')
 
     print('save in', 'output/GSI/bj_' + snapshot)
 
