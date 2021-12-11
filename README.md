@@ -10,14 +10,14 @@ The complexity of navigation in large cities is increasing with the expansion of
 
 - **LSI_from_ksp.py** is used to calculate the local search information from the k shortest paths. (Results section 3).
 
-- **GSI.py** reproduces the amount of global search information according to ref [1] (Results sections 2 & 3).
+- **GSI.py** reproduces the amount of global search information according to ref. [1] (Results sections 2 & 3).
 
 - **funcs.py** includes the basic functions for the calculations in the networks.
 
 - **iofiles.py** includes the I/O functions for saving and loading the files.
 
 ## Data description
-All the data supporting the program is included in ./src_data/
+All the data supporting the program is included in ./src_data/.
 
 ## References
 [1] Gallotti, R., Porter,  M.  A.  & Barthelemy, M. Lost in transportation: Information measures and cognitive limits in multilayer navigation. Science Advances 2, e1500445 (2016).
