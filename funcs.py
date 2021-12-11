@@ -252,7 +252,7 @@ def cal_entropy_in_dualG(list_paths, dualG):
     if(n_turns > 0):
         p_st = 1 / len(dualG[path[0]])
         for i in range(0, n_turns - 1):
-            k_options = len(dualG[path[i + 1]]) - 1 if path[i] != path[i + 2] 
+            k_options = len(dualG[path[i + 1]]) - 1 if path[i] != path[i + 2] \
             else len(dualG[path[i + 1]]) 
             # avoid the cases where the denominator is 0 due to a circular path
             # in the matched paths
