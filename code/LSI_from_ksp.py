@@ -7,7 +7,7 @@ Steps:
     between the OD stations.
     3. The entropy of the fastest simplest path is the station-level LSI of the
     OD stations.
-    3. Get the line-level LSI by aggregating the entropy of all the matched paths
+    4. Get the line-level LSI by aggregating the entropy of all the matched paths
     between line pairs.
 
 """
