@@ -78,15 +78,15 @@ def LSI_btw_ij(
 
     Returns
     -------
-    df_matched_paths0 : the search information of each matched path is added to
+    df_matched_paths : the search information of each matched path is added to
     column 'S_sub'.
 
     """
     df_od_paths = merge_paths(df_all_paths)
     if(len(df_od_paths) > 0 and df_od_paths['avg_counts'].sum() > 0):
-        df_matched_paths0 = df_od_paths.copy(deep=True)
-        df_matched_paths0['i'] = sid1
-        df_matched_paths0['j'] = sid2
+        df_matched_paths = df_od_paths.copy(deep=True)
+        df_matched_paths['i'] = sid1
+        df_matched_paths['j'] = sid2
 
         list_paths = df_all_paths[df_all_paths['seq_lines'].astype(
             np.str_).isin(df_od_paths['seq_lines'])]['seq_stops']
@@ -107,11 +107,11 @@ def LSI_btw_ij(
             cal_entropy_in_dualG(
                 [list_lines],
                 dualG_sub) for list_lines in paths]
-        df_matched_paths0['S_sub'] = E_k0
-        df_matched_paths0['Ktot_sub'] = N_Ktot_k
-        df_matched_paths0['diff_nroutes'] = df_od_paths['nroutes'] - \
+        df_matched_paths['S_sub'] = E_k0
+        df_matched_paths['Ktot_sub'] = N_Ktot_k
+        df_matched_paths['diff_nroutes'] = df_od_paths['nroutes'] - \
             df_od_paths['nroutes'].min()
-        return df_matched_paths0
+        return df_matched_paths
     return None
 
 
