@@ -24,3 +24,6 @@ All the data supporting the program is included in ./src_data/.
 [1] Gallotti, R., Porter,  M.  A.  & Barthelemy, M. Lost in transportation: Information measures and cognitive limits in multilayer navigation. Science Advances 2, e1500445 (2016).
 
 ## Cite
+
+
+Contact: zhuojun.jiang@pku.edu.cn
