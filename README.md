@@ -1,5 +1,5 @@
 # Quantifying navigation complexity in transportation networks
-Title: Quantifying navigation complexity in transportation networks
+by Zhuojun Jiang, Lei Dong, Lun Wu and Yu Liu
 ## Abstract
 The complexity of navigation in large cities increases with the expansion of transportation networks, which brings a number of problems such as congestion and increased travel costs. When analysing urban navigation, previous studies typically assume that travellers make route choices based on global information of networks, but the actual trips are mainly made based on local information. Here, using 76 million trips on the Beijing subway, we quantify the navigation difficulty from an information perspective. We find that the traveller's decision information on a local network is much smaller than on a global network and grows more slowly with the number of transfers. The evolution of navigation costs over the last two decades further demonstrates that while the global network becomes difficult to navigate, local navigability can still be improved. We also discover that behind the complexity of network dynamics a simple linear relationship exists between the local and global navigation information(s) that allows the two metrics to predict each other.
 
