@@ -80,7 +80,7 @@ def shortest_simplest_path(
                 distance = distance0
     # Calculate the entropy of finding the fastest simplest path [list_paths0]
     # in dualG
-    E = cal_entropy_in_dualgraph(list_paths0, dualG)
+    E = cal_entropy_in_dualG(list_paths0, dualG)
     return list_paths0, list_pathsturns0, E, duration, distance
 
 
