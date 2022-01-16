@@ -18,15 +18,17 @@ Python codes to replicate the results of the paper:
 
 - **iofiles.py** includes the I/O functions for saving and loading the files.
 
+- **gen_figures.ipynb** reproduces the figures in the paper.
+
 ## Data
 Data to replicate the results of the paper (saved as python objects in pickle files):
 - networks: subway networks of three cities from 2000 to 2020.
-	* Beijing (bj): 15 snapshots
-	* Shanghai (sh): 18 snapshots
-	* Shenzhen (sz): 8 snapshots
+	* Beijing (bj): 15 snapshots.
+	* Shanghai (sh): 18 snapshots.
+	* Shenzhen (sz): 8 snapshots.
 - networks_with_records: subway networks of three cities in the specific years with smart card data.
 	* Beijing (2019), Shanghai (2015), Shenzhen (2017).
-	* Due to a data non-disclosure agreement, only three days of smart records are shared in this data set for replication, please contact the author for more data.
+	* Due to a data non-disclosure agreement, only three days of smart card records are shared in this data set for replication, please contact the author for more data.
 - src_data: basic information used to initialize the code.
 - output: output data used to generate the figures in the paper.
 
