@@ -266,7 +266,7 @@ def merge_2_st_matching(
     for i in range(0, len(list_nid)):
         for j in range(0, len(list_nid)):
             sort_paths = df_matched_paths[(df_matched_paths['i'].isin(np.array(
-                list_sids[i]) - 1)) & (df_matched_paths['j'].isin(np.array(list_sids[j])))]
+                list_sids[i]) - 1)) & (df_matched_paths['j'].isin(np.array(list_sids[j]) - 1))]
             list_S = np.array(sort_paths['S_sub'].tolist())
             list_nlines = np.array(sort_paths['nroutes'].tolist())
 
