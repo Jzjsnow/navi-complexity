@@ -19,7 +19,8 @@ Python codes to replicate the results of the paper:
 - **iofiles.py** includes the I/O functions for saving and loading the files.
 
 ## Data
-- networks: subway networks of three cities from 2000 to 2020 (saved as python objects in pickle files).
+Data to replicate the results of the paper (saved as python objects in pickle files):
+- networks: subway networks of three cities from 2000 to 2020.
 	* Beijing (bj): 15 snapshots
 	* Shanghai (sh): 18 snapshots
 	* Shenzhen (sz): 8 snapshots
