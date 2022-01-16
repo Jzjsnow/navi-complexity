@@ -454,7 +454,7 @@ def merge_2_st_matching_C(G_relabeled, df_matched_paths, max_width, thres_C=None
     for i in range(0, len(list_nid)):
         for j in range(0, len(list_nid)):
             sort_paths = df_matched_paths[(df_matched_paths['i'].isin(np.array(
-                list_sids[i]) - 1)) & (df_matched_paths['j'].isin(np.array(list_sids[j])))]
+                list_sids[i]) - 1)) & (df_matched_paths['j'].isin(np.array(list_sids[j]) - 1))]
             list_S = np.array(sort_paths['S_sub'].tolist())
             list_nlines = np.array(sort_paths['nroutes'].tolist())
 
@@ -479,7 +479,7 @@ def merge_2_st_matching_C(G_relabeled, df_matched_paths, max_width, thres_C=None
                         np.sum(list_nlines) / list_nlines
             else:
                 list_S = list_S[(list_nlines > 0) & (list_nlines == thres_C + 1)]
-                list_nlines = list_nlines[(list_nlines > 0) & (list_nlines == thres_C)]
+                list_nlines = list_nlines[(list_nlines > 0) & (list_nlines == thres_C + 1)]
 
                 if(count_weighted):
                     list_count = list_count[(list_nlines > 0) & (list_nlines == thres_C + 1)]
