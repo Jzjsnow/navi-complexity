@@ -247,20 +247,21 @@ def subnetwork_analysis(
     return matrix_S, matrix_nroutes, matrix_pathlength, matrix_pathdist, matrix_Ktot
 
 
-def get_LSI_snapshot(mat_width, snapshot, kmax, suffix):
+def get_LSI_snapshot(city_abbr, mat_width, snapshot, kmax, suffix):
     """
     Get the station-level LSI and line-level GSI under each time snapshot and
     save the results
 
     Parameters
     ----------
+    city_abbr : abbreviation of the city name.
     mat_width : width of result matrix (station-level search information).
     snapshot : string of a specific year.
 
 
     """
     [G_sub, dualG_sub, dualG_nodes_sub, dualG_edges_sub] = \
-        load_variable('src_data/networks/data_G_bj_' + snapshot)
+        load_variable('src_data/networks/data_G_'+city_abbr+'_' + snapshot)
     print(snapshot, 'data', 'loaded')
 
     matrix_Ss_sub, matrix_nroutes_sub, matrix_pathlength_sub, matrix_pathdist_sub, matrix_Ktot_sub = subnetwork_analysis(
@@ -289,8 +290,8 @@ def get_LSI_snapshot(mat_width, snapshot, kmax, suffix):
                    matrix_S_sub_nid_C3,
                    matrix_Ktot_st_C3_sub,
                    ],
-                  'output/LSI/ksp_' + str(kmax) + '_bj_' + suffix)
-    print('save in', 'output/LSI/ksp_' + str(kmax) + '_bj_' + suffix)
+                  'output/LSI/ksp_' + str(kmax) + '_'+city_abbr+'_' + suffix)
+    print('save in', 'output/LSI/ksp_' + str(kmax) + '_'+city_abbr+'_' + suffix)
 
 
 if __name__ == "__main__":
@@ -299,13 +300,13 @@ if __name__ == "__main__":
     [timeline, list_city, city_idx, city, city_abbr,
      G, G_relabeled, dualG, dualG_nodes, dualG_nodes_en, dualG_edges,
      node_pos_proj, node_pos_proj_relabeled, line_pos
-     ] = load_variable('src_data/initial_info')
+     ] = load_variable('src_data/initial_info_bj')
 
     max_line_id = max(node[0] for node in dualG_nodes)
     mat_width = max(G.nodes)
 
     # get LSI under each snapshot and save the results
     for snapshot in timeline:
-        get_LSI_snapshot(mat_width, snapshot, 7, snapshot + '.pkl')
-        get_LSI_snapshot(mat_width, snapshot, 9, snapshot + '.pkl')
-        get_LSI_snapshot(mat_width, snapshot, 15, snapshot + '.pkl')
+        get_LSI_snapshot(city_abbr, mat_width, snapshot, 7, snapshot + '.pkl')
+        get_LSI_snapshot(city_abbr, mat_width, snapshot, 9, snapshot + '.pkl')
+        get_LSI_snapshot(city_abbr, mat_width, snapshot, 15, snapshot + '.pkl')

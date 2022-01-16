@@ -124,7 +124,7 @@ def network_analysis(
     counts = 0
     process = 0
     if(filename == ''):
-        filename = "log/dual_sub_simple_bj.txt"
+        filename = "log/dual_sub_simple.txt"
     list_nodes = G_relabeled.nodes()
 
     for o_label in G_relabeled.nodes:
@@ -180,13 +180,14 @@ def network_analysis(
     return matrix_S, matrix_nroutes, matrix_pathlength, matrix_pathdist
 
 
-def get_GSI_snapshot(mat_width, snapshot):
+def get_GSI_snapshot(city_abbr, mat_width, snapshot):
     """
     Get the station-level GSI and line-level GSI under each time snapshot and
     save the results
 
     Parameters
     ----------
+    city_abbr : abbreviation of the city name.
     mat_width : width of result matrix (station-level search information).
     snapshot : string of a specific year.
 
@@ -196,11 +197,11 @@ def get_GSI_snapshot(mat_width, snapshot):
 
     """
     [G_sub, dualG_sub, dualG_nodes_sub, dualG_edges_sub] = \
-        load_variable('src_data/networks/data_G_bj_' + snapshot)
+        load_variable('src_data/networks/data_G_'+city_abbr+'_' + snapshot)
     N_sub = len(set([node.split('-')[1] for node in G_sub.nodes()]))
     N_Ktot = len(nx.Graph(dualG_sub).edges())
     matrix_Ss, matrix_nroutes, matrix_pathlength, matrix_pathdist = network_analysis(
-        G_sub, dualG_sub, dualG_nodes_sub, mat_width, filename="log/dual_sub_simple_bj_" + snapshot + ".txt")
+        G_sub, dualG_sub, dualG_nodes_sub, mat_width, filename="log/dual_sub_simple_" + snapshot + ".txt")
     matrix_S_nid = merge_2_st_const_width(
         G_sub,
         matrix_Ss,
@@ -229,9 +230,9 @@ def get_GSI_snapshot(mat_width, snapshot):
                    matrix_S_nid_C1,
                    matrix_S_nid_C2,
                    matrix_S_nid_C3],
-                  'output/GSI/bj_' + snapshot + '.pkl')
+                  'output/GSI/'+city_abbr+'_' + snapshot + '.pkl')
 
-    print('save in', 'output/GSI/bj_' + snapshot)
+    print('save in', 'output/GSI/'+city_abbr+'_' + snapshot)
 
 
 if __name__ == "__main__":
@@ -240,11 +241,11 @@ if __name__ == "__main__":
     [timeline, list_city, city_idx, city, city_abbr,
      G, G_relabeled, dualG, dual_nodes, dual_nodes_en, dual_edges,
      node_pos_proj, node_pos_proj_relabeled, line_pos
-     ] = load_variable('src_data/initial_info')
+     ] = load_variable('src_data/initial_info_bj')
 
     max_line_id = max(node[0] for node in dual_nodes)
     mat_width = max(G.nodes)
 
     # get GSI under each snapshot and save the results
     for snapshot in timeline:
-        get_GSI_snapshot(mat_width, snapshot)
+        get_GSI_snapshot(city_abbr, mat_width, snapshot)

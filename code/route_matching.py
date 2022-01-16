@@ -230,15 +230,18 @@ def matching(
 if __name__ == "__main__":
 
     kmax = 200
-    suffix = '2019_402_284'  # for 2019
-    # suffix = '2016_445_303' # for 2016
+    files=[['bj','2019_402_284'],['sh','2015_431_320'],['sz','2017_376_248']]
+    city_idx = 0
+    city_abbr = files[city_idx][0]
+    suffix = files[city_idx][1]
+    
 
     # import data
     [G, G_relabeled, dualG, dual_nodes, dual_edges, H, H_relabeled, dualH, dualH_nodes, dualH_edges,
-        df_records] = load_variable('src_data/networks_with_records/data_G_bj_card_' + suffix + '.pkl')
+        df_records] = load_variable('src_data/networks_with_records/data_G_'+city_abbr+'_card_' + suffix + '.pkl')
     print(
         'data',
-        'src_data/networks_with_records/data_G_bj_card_' + suffix,
+        'src_data/networks_with_records/data_G_'+city_abbr+'_card_' + suffix,
         'loaded')
 
     list_nodeid = [x for x in G.nodes]
@@ -249,8 +252,8 @@ if __name__ == "__main__":
     line_dict = {1: [1], 2: [2], 3: [4,93], 4: [5], 5: [6], 6: [7], 7: [8],
         8: [8], 9: [9], 10: [10,90], 11: [13], 12: [14], 13: [14], 14: [15],
         15: [16], 16: [91], 17: [97], 18: [94], 20: [95], 21: [98], 22: [89],
-        23: [92], 24: [96]}  # for 2019
-    # line_dict = {n[0]: [n[0]] for n in dualH_nodes} # for 2016
+        23: [92], 24: [96]}  # for Beijing
+    # line_dict = {n[0]: [n[0]] for n in dualH_nodes} # for Shanghai, Shenzhen
 
     matrix_matched_path = matching(
         H_relabeled,

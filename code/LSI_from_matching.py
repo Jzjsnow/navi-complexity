@@ -300,7 +300,10 @@ def merge_2_st_matching(
 
 if __name__ == "__main__":
 
-    suffix = '2019_402_284'
+    files=[['bj','2019_402_284'],['sh','2015_431_320'],['sz','2017_376_248']]
+    city_idx = 0
+    city_abbr = files[city_idx][0]
+    suffix = files[city_idx][1]
 
     [G,
      G_relabeled,
@@ -312,7 +315,7 @@ if __name__ == "__main__":
      dualH,
      dualH_nodes,
      dualH_edges,
-     df_records] = load_variable('src_data/networks_with_records/data_G_bj_card_' + suffix)
+     df_records] = load_variable('src_data/networks_with_records/data_G_'+city_abbr+'_card_' + suffix)
     print('data loaded')
 
     # import the matched paths
@@ -332,7 +335,7 @@ if __name__ == "__main__":
 
     # save
     save_variable([df_matched_paths, df_Ss_i_j],
-                  'output/LSI/res_stationlevel_bj_card_' + suffix + '.pkl')
+                  'output/LSI/res_stationlevel_'+city_abbr+'_card_' + suffix + '.pkl')
 
     # calculate the line-level LSI
     matrix_S_sub_nid = merge_2_st_matching(
