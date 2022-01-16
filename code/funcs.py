@@ -11,6 +11,7 @@ import networkx as nx
 from networkx.classes.function import path_weight
 from itertools import islice
 
+
 def k_shortest_paths(G, source, target, k, weight=None):
     """
     Get the k shortest paths from source to target in G
@@ -43,7 +44,7 @@ def get_od_ksp_attr_all(
         dura_thres):
     """
     Get the attributes of all the shortest paths from station o_label to
-    station d_label in the subway network [G_relabeled] whose travel time is 
+    station d_label in the subway network [G_relabeled] whose travel time is
     within the threshold [dura_thres].
 
     Parameters
@@ -160,7 +161,8 @@ def dual_shortest_path(G, source, target, ifgetturnseq=True):
         if(n_turns > 0):
             p_st = 1 / len(G[path[0]])
             for i in range(0, n_turns - 1):
-                k_options = len(G[path[i + 1]]) - 1 if len(G[path[i + 1]]) - 1 > 0 else 1
+                k_options = len(G[path[i + 1]]) - \
+                    1 if len(G[path[i + 1]]) - 1 > 0 else 1
                 p_st *= 1 / k_options
         p_st_sum += p_st
     E = -np.log2(p_st_sum)
@@ -253,7 +255,7 @@ def cal_entropy_in_dualG(list_paths, dualG):
         p_st = 1 / len(dualG[path[0]])
         for i in range(0, n_turns - 1):
             k_options = len(dualG[path[i + 1]]) - 1 if path[i] != path[i + 2] \
-            else len(dualG[path[i + 1]]) 
+                else len(dualG[path[i + 1]])
             # avoid the cases where the denominator is 0 due to a circular path
             # in the matched paths
             p_st *= 1 / k_options
@@ -337,7 +339,7 @@ def merge_2_st_const_width(
                     list_Ktot = list_Ktot[list_nlines == thres_C + 1]
                     matrix_Ktot_st_sub[list_nid[i] - 1][list_nid[j] - 1] = \
                         np.sum(list_Ktot) / list_Ktot.size
-                        
+
     if(matrix_Ktot_sub is not None):
         return matrix_S_nid, matrix_Ktot_st_sub
     else:
@@ -371,9 +373,9 @@ def get_sub_dualG_relabeled(G, dualG_nodes, dualG_edges):
                                    for y in list(H[sid])]))
         sid = int(sid.split('-')[1])
         if(len(incident_lines) > 1):  # sid: transfer station
-            add_edges = [x for x in dualG_edges if x[2] == sid 
-                         and x[0] in incident_lines 
-                         and x[1] in incident_lines 
+            add_edges = [x for x in dualG_edges if x[2] == sid
+                         and x[0] in incident_lines
+                         and x[1] in incident_lines
                          and x not in dualG_edges_sub]
             dualG_edges_sub = dualG_edges_sub + add_edges
     dualG = nx.MultiGraph()
@@ -381,7 +383,8 @@ def get_sub_dualG_relabeled(G, dualG_nodes, dualG_edges):
     keys = dualG.add_edges_from(dualG_edges_sub)
     return dualG, dualG_nodes_sub, dualG_edges_sub
 
-def get_matrixC(dualG,dual_nodes,mat_width):
+
+def get_matrixC(dualG, dual_nodes, mat_width):
     """
     Get the minimum number of transfers between two subway lines.
 
@@ -398,26 +401,32 @@ def get_matrixC(dualG,dual_nodes,mat_width):
 
     """
 
-    list_nodes=list(max(nx.connected_components(dualG),key=len))
+    list_nodes = list(max(nx.connected_components(dualG), key=len))
     list_cols = []
-    for col in np.arange(0,len(dual_nodes)):
+    for col in np.arange(0, len(dual_nodes)):
         if(dual_nodes[col][0] in list_nodes):
             list_cols.append(col)
-        
-    matrix_C=np.zeros((mat_width,mat_width))-1
-    is_connected =  nx.is_connected(dualG)
+
+    matrix_C = np.zeros((mat_width, mat_width)) - 1
+    is_connected = nx.is_connected(dualG)
     p = dict(nx.shortest_path_length(dualG))
-    for i in range(0,len(dual_nodes)):
-        for j in range(0,len(dual_nodes)):
+    for i in range(0, len(dual_nodes)):
+        for j in range(0, len(dual_nodes)):
             if(is_connected is True or dual_nodes[i][0] in list_nodes and dual_nodes[j][0] in list_nodes):
-                matrix_C[dual_nodes[i][0]-1][dual_nodes[j][0]-1] = p[dual_nodes[i][0]][dual_nodes[j][0]]
+                matrix_C[dual_nodes[i][0] - 1][dual_nodes[j][0] -
+                                               1] = p[dual_nodes[i][0]][dual_nodes[j][0]]
     return matrix_C
-    
-    
-def merge_2_st_matching_C(G_relabeled, df_matched_paths, max_width, thres_C=None,count_weighted = False):
+
+
+def merge_2_st_matching_C(
+        G_relabeled,
+        df_matched_paths,
+        max_width,
+        thres_C=None,
+        count_weighted=False):
     """
     Get the average number of transfers between each two subway
-    lines. The aggregation uses the number of transfers and flow 
+    lines. The aggregation uses the number of transfers and flow
     weights of all the matched paths between line pairs.
 
     Parameters
@@ -441,16 +450,15 @@ def merge_2_st_matching_C(G_relabeled, df_matched_paths, max_width, thres_C=None
     matrix_C : the average number of transfers between each two subway lines.
 
     """
-    
+
     list_nid = list(set([int(node.split('-')[0])
                          for node in G_relabeled.nodes]))
     list_sids = [list(set([int(node.split('-')[1])
                            for node in G_relabeled.nodes if int(node.split('-')[0]) == nid])) for nid in list_nid]
 
-    
-    matrix_S_nid = np.zeros((max_width, max_width))*np.nan
-    matrix_C = np.zeros((max_width, max_width))*np.nan
-    
+    matrix_S_nid = np.zeros((max_width, max_width)) * np.nan
+    matrix_C = np.zeros((max_width, max_width)) * np.nan
+
     for i in range(0, len(list_nid)):
         for j in range(0, len(list_nid)):
             sort_paths = df_matched_paths[(df_matched_paths['i'].isin(np.array(
@@ -461,16 +469,16 @@ def merge_2_st_matching_C(G_relabeled, df_matched_paths, max_width, thres_C=None
             if(count_weighted):
                 list_count = np.array(sort_paths['avg_counts'].tolist())
                 list_count = list_count[list_nlines > 0]
-                
+
             list_S = list_S[list_nlines > 0]
             list_nlines = list_nlines[list_nlines > 0]
-            
+
             if(thres_C is None):
                 if(count_weighted):
                     matrix_S_nid[list_nid[i] - 1][list_nid[j] - 1] = np.sum(
                         list_S * list_count) / np.sum(list_count[list_nlines > 0])
                     matrix_C[list_nid[i] - 1][list_nid[j] - 1] = np.sum(
-                    list_nlines * list_count)/np.sum(list_count[list_nlines > 0])
+                        list_nlines * list_count) / np.sum(list_count[list_nlines > 0])
 
                 else:
                     matrix_S_nid[list_nid[i] - 1][list_nid[j] - 1] = \
@@ -478,16 +486,21 @@ def merge_2_st_matching_C(G_relabeled, df_matched_paths, max_width, thres_C=None
                     matrix_C[list_nid[i] - 1][list_nid[j] - 1] = \
                         np.sum(list_nlines) / list_nlines
             else:
-                list_S = list_S[(list_nlines > 0) & (list_nlines == thres_C + 1)]
-                list_nlines = list_nlines[(list_nlines > 0) & (list_nlines == thres_C + 1)]
+                list_S = list_S[(list_nlines > 0) & (
+                    list_nlines == thres_C + 1)]
+                list_nlines = list_nlines[(list_nlines > 0) & (
+                    list_nlines == thres_C + 1)]
 
                 if(count_weighted):
-                    list_count = list_count[(list_nlines > 0) & (list_nlines == thres_C + 1)]
+                    list_count = list_count[(list_nlines > 0) & (
+                        list_nlines == thres_C + 1)]
                     matrix_S_nid[list_nid[i] - 1][list_nid[j] - 1] = \
                         np.sum(list_S * list_count) / np.sum(list_count)
-                    matrix_C[list_nid[i] - 1][list_nid[j] - 1] = np.sum(list_nlines * list_count) / np.sum(list_count)
-                else:           
+                    matrix_C[list_nid[i] - 1][list_nid[j] -
+                                              1] = np.sum(list_nlines * list_count) / np.sum(list_count)
+                else:
                     matrix_S_nid[list_nid[i] - 1][list_nid[j] - 1] = \
                         np.sum(list_S) / list_S.size
-                    matrix_C[list_nid[i] - 1][list_nid[j] - 1] = np.sum(list_nlines) / list_nlines
+                    matrix_C[list_nid[i] - 1][list_nid[j] -
+                                              1] = np.sum(list_nlines) / list_nlines
     return matrix_C - 1
