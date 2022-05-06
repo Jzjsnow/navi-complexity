@@ -271,7 +271,7 @@ def merge_2_st_const_width(
         thres_C=None,
         matrix_Ktot_sub=None):
     """
-    Get the line-level GSI by aggregating from the station-level search
+    Get the line-level TSI by aggregating from the station-level search
     information.
     The aggregation uses the station-level entropy of the fastest simplest
     paths between line pairs and the flow weights are set to 1
