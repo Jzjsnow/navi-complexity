@@ -134,7 +134,7 @@ def matching_OD_stations(G_relabeled, sid1, sid2, df_records, line_dict, dict_eu
     df_records : a pandas dataframe of records between each pair of stations.
     line_dict : a dictionary that maps the line IDs in the network to the line
     IDs in the records.
-    dict_eudist : a dictionary that return the euclidean distance between a 
+    dict_eudist : a dictionary that return the euclidean distance between each 
     station pair.
     buffer : time buffer for filtering candidate paths.
     args : the parameters of the choice model (i.e., [beta0,beta1]).
@@ -248,7 +248,7 @@ def matching(
     mat_width : the width of the result matrix.
     line_dict : A dictionary that maps the line ID in the network to the line ID
     in the records.
-    dict_eudist : a dictionary that return the euclidean distance between a 
+    dict_eudist : a dictionary that return the euclidean distance between each 
     station pair.
     buffer : time buffer for filtering candidate paths.
     args : the parameters of the choice model (i.e., [beta0,beta1]).
