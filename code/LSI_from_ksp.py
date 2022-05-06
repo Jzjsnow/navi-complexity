@@ -298,13 +298,13 @@ def get_LSI_snapshot(city_abbr, mat_width, max_line_id, snapshot, kmax, dist_dic
         G_sub, dualG_sub, dualG_nodes_sub, dualG_edges_sub, mat_width, kmax, dist_dict, args, filename="log/log.txt")
 
     matrix_S_sub_nid, matrix_Ktot_st_sub = merge_2_st_const_width(
-        G_sub, matrix_Ss_sub, matrix_nroutes_sub, mat_width, thres_C=None, matrix_Ktot_sub=matrix_Ktot_sub)
+        G_sub, matrix_Ss_sub, matrix_nroutes_sub, max_line_id, thres_C=None, matrix_Ktot_sub=matrix_Ktot_sub)
     matrix_S_sub_nid_C1, matrix_Ktot_st_C1_sub = merge_2_st_const_width(
-        G_sub, matrix_Ss_sub, matrix_nroutes_sub, mat_width, thres_C=1, matrix_Ktot_sub=matrix_Ktot_sub)
+        G_sub, matrix_Ss_sub, matrix_nroutes_sub, max_line_id, thres_C=1, matrix_Ktot_sub=matrix_Ktot_sub)
     matrix_S_sub_nid_C2, matrix_Ktot_st_C2_sub = merge_2_st_const_width(
-        G_sub, matrix_Ss_sub, matrix_nroutes_sub, mat_width, thres_C=2, matrix_Ktot_sub=matrix_Ktot_sub)
+        G_sub, matrix_Ss_sub, matrix_nroutes_sub, max_line_id, thres_C=2, matrix_Ktot_sub=matrix_Ktot_sub)
     matrix_S_sub_nid_C3, matrix_Ktot_st_C3_sub = merge_2_st_const_width(
-        G_sub, matrix_Ss_sub, matrix_nroutes_sub, mat_width, thres_C=3, matrix_Ktot_sub=matrix_Ktot_sub)
+        G_sub, matrix_Ss_sub, matrix_nroutes_sub, max_line_id, thres_C=3, matrix_Ktot_sub=matrix_Ktot_sub)
 
     save_variable([matrix_Ss_sub,
                    matrix_nroutes_sub,
@@ -329,14 +329,24 @@ if __name__ == "__main__":
     # import network data
     [timeline, list_city, city_idx, city, city_abbr,
      G, G_relabeled, dualG, dualG_nodes, dualG_nodes_en, dualG_edges,
-     node_pos_proj, node_pos_proj_relabeled, line_pos
+     node_pos_proj, node_pos_proj_relabeled, line_pos, dict_eudist
      ] = load_variable('src_data/initial_info_bj')
+
+    files=[['bj','2019_402_284',[-0.00629 , -30.9936]],
+        ['sh','2015_431_320',[-0.00228 , -127.7]],
+        ['sz','2017_376_248',[-0.00311 , -113.2]]]
+        
+    city_idx = 0
+    city_abbr = files[city_idx][0]
+    suffix = files[city_idx][1]
+    args = files[city_idx][2]
+    timeline = timelines[city_idx]
 
     max_line_id = max(node[0] for node in dualG_nodes)
     mat_width = max(G.nodes)
 
     # get LSI under each snapshot and save the results
     for snapshot in timeline:
+        get_LSI_snapshot(city_abbr, mat_width, max_line_id, snapshot, 11, dict_eudist, args, snapshot + '.pkl')
         get_LSI_snapshot(city_abbr, mat_width, max_line_id, snapshot, 13, dict_eudist, args, snapshot + '.pkl')
-        get_LSI_snapshot(city_abbr, mat_width, snapshot, 12, dict_eudist, args, snapshot + '.pkl')
-        get_LSI_snapshot(city_abbr, mat_width, snapshot, 6, dict_eudist, args, snapshot + '.pkl')
+        get_LSI_snapshot(city_abbr, mat_width, max_line_id, snapshot, 15, dict_eudist, args, snapshot + '.pkl')
