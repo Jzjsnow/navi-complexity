@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 
 """
-Functions for calculating LSI from matched paths (in Results section 2)
+Functions for calculating ESI from matched paths (in Results section 2)
 Steps:
     1. Construct the sub-network for each OD station pair and calculate the
     entropy of all the matched paths between the OD.
-    2. Get the station-level LSI by aggregating the entropy of all the matched
+    2. Get the station-level ESI by aggregating the entropy of all the matched
     paths between station pairs.
-    3. Get the line-level LSI by aggregating the entropy of all the matched
+    3. Get the line-level ESI by aggregating the entropy of all the matched
     paths between line pairs.
 
 """
@@ -145,14 +145,13 @@ def LSI_from_matching(
         columns=[
             'seq_lines',
             'avg_counts',
-            'perc',
             'i',
             'j',
             'nroutes',
             'S_sub',
             'diff_nroutes',
             'Ktot_sub',
-            'diff_dura'])
+            ])
 
     for sid1 in list_stationid:
         for sid2 in list_stationid:
@@ -183,6 +182,7 @@ def weighted_avg_and_std(values, weights):
     return (average, math.sqrt(variance))
 
 
+
 def merge_2_ij_matching(df_matched_paths):
     """
     Get the station-level search information (LSI).
@@ -203,15 +203,14 @@ def merge_2_ij_matching(df_matched_paths):
         ['i', 'j'], as_index=False) .apply(
         lambda x: pd.Series(
             [
-                np.sum(
-                    x['S_sub'] * x['avg_counts']) / np.sum(
-                    x['avg_counts']), np.sum(
-                    x['avg_counts']), len(
-                    x['seq_lines']), np.sum(
-                    x['nroutes'] * x['avg_counts']) / np.sum(
-                    x['avg_counts']), np.min(
-                    x['nroutes']), weighted_avg_and_std(
-                    x['duration'], x['avg_counts'])[0]]))
+                np.sum(x['S_sub'] * x['avg_counts']) / np.sum(x['avg_counts']),
+                np.sum(x['avg_counts']),
+                len(x['seq_lines']),
+                np.sum(x['nroutes'] * x['avg_counts']) / np.sum(x['avg_counts']),
+                np.min(x['nroutes']),
+                np.sum(x['duration'] * x['avg_counts']) / np.sum(x['avg_counts']),
+                np.sum(x['Ktot_sub'] * x['avg_counts']) / np.sum(x['avg_counts'])
+            ]))
     df_Ss_i_j.rename(
         columns={
             0: 'S_sub',
@@ -219,7 +218,8 @@ def merge_2_ij_matching(df_matched_paths):
             2: 'k_paths',
             3: 'nroutes',
             4: 'min_nroutes',
-            5: 'duration'},
+            5: 'duration',
+            6:'Ktot_sub'},
         inplace=True)
     df_Ss_i_j['k_paths'] = df_Ss_i_j['k_paths'].astype(np.int)
 
@@ -296,7 +296,7 @@ def merge_2_st_matching(
                         np.sum(list_S) / list_S.size
 
     return matrix_S_nid
-
+    
 
 if __name__ == "__main__":
 
@@ -315,14 +315,15 @@ if __name__ == "__main__":
      dualH,
      dualH_nodes,
      dualH_edges,
-     df_records] = load_variable('src_data/networks_with_records/data_G_'+city_abbr+'_card_' + suffix)
+     df_records,
+     dict_eudist] = load_variable('src_data/networks_with_records/data_G_'+city_abbr+'_card_' + suffix)
     print('data loaded')
 
     # import the matched paths
     [matrix_matched_path] = load_variable(
         'output/matrix_matched_path_' + suffix + '.pkl')
 
-    # calculate the LSI of the matched paths
+    # calculate the ESI of the matched paths
     df_matched_paths = LSI_from_matching(
         H_relabeled,
         dualH_nodes,
@@ -330,30 +331,30 @@ if __name__ == "__main__":
         matrix_matched_path,
         filename='log.txt')
 
-    # calculate the station-level LSI
+    # calculate the station-level ESI
     df_Ss_i_j = merge_2_ij_matching(df_matched_paths)
 
     # save
     save_variable([df_matched_paths, df_Ss_i_j],
-                  'output/LSI/res_stationlevel_'+city_abbr+'_card_' + suffix + '.pkl')
+                  'output/ESI/res_stationlevel_'+city_abbr+'_card_' + suffix + '.pkl')
 
-    # calculate the line-level LSI
+    # calculate the line-level ESI
     matrix_S_sub_nid = merge_2_st_matching(
-        H_relabeled,
+        G_relabeled,
         df_matched_paths,
         count_weighted=True)
     matrix_S_sub_nid_C1 = merge_2_st_matching(
-        H_relabeled,
+        G_relabeled,
         df_matched_paths,
         thres_C=1,
         count_weighted=True)
     matrix_S_sub_nid_C2 = merge_2_st_matching(
-        H_relabeled,
+        G_relabeled,
         df_matched_paths,
         thres_C=2,
         count_weighted=True)
     matrix_S_sub_nid_C3 = merge_2_st_matching(
-        H_relabeled,
+        G_relabeled,
         df_matched_paths,
         thres_C=3,
         count_weighted=True)
@@ -363,4 +364,4 @@ if __name__ == "__main__":
                    matrix_S_sub_nid_C1,
                    matrix_S_sub_nid_C2,
                    matrix_S_sub_nid_C3,
-                   ], 'output/LSI/res_linelevel_card_' + suffix + '.pkl')
+                   ], 'output/ESI/res_linelevel_card_' + suffix + '.pkl')

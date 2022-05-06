@@ -11,7 +11,7 @@ from funcs import *
 from iofiles import *
 
 
-def route_cut(df_records_sub, df_ksp):
+def route_cost(df_records_sub, df_ksp, buffer, args):
     """
     Match each record to the candidate path with the closest travel time and
     return the matched paths
@@ -20,54 +20,107 @@ def route_cut(df_records_sub, df_ksp):
     ----------
     df_records_sub : a pandas dataframe of the records.
     df_ksp : a pandas dataframe of the candidate paths to match.
-
+    buffer : time buffer for filtering candidate paths.
+    args : the parameters of the choice model (i.e., [beta0,beta1]).
+    
     Returns
     -------
-    df_ksp : the dataframe of the paths where the numbers of trips on each
+    df_ksp : the dataframe of the matched paths where the numbers of trips on each
     matched paths are added.
 
     """
 
-    arr = np.sort(df_ksp['duration'].values)
-    arr = arr[(arr >= df_records_sub[0].min()) &
-              (arr <= df_records_sub[0].max())]
-    midtime = [(arr[i] + arr[i + 1]) / 2 for i in range(len(arr) - 1)
-               if arr[i + 1] - arr[i] > 0.000001]
-    bounds = [df_records_sub[0].min(), df_records_sub[0].max()]
-    rbins = np.append(midtime, bounds)
-    rbins = np.sort(rbins)
+    arr = np.sort(list(set(df_ksp['duration'].values)))
+    
+    t_start = int(arr[0]-buffer)
+    t_end = int(arr[-1]+buffer)
+    path_arr =np.zeros(t_end-t_start+1)
+    path_arr[list((arr-t_start).astype(int))]=1
+    
+    ti = t_start
+    left0 = ti-buffer if ti-buffer> t_start else t_start
+    right0 = ti+buffer if ti+buffer < t_end else t_end
+    cut_time =[ti]
+    n_path = []
+    
+    for ti in range(t_start,t_end+1):
+        left = ti-buffer if ti-buffer> t_start else t_start
+        right = ti+buffer if ti+buffer < t_end else t_end    
+        if(path_arr[left-t_start]-path_arr[left0-t_start]==-1 
+           or path_arr[right-t_start]-path_arr[right0-t_start]==1):
+            cut_time.append(ti)
+            n_path.append(sum(path_arr[left0-t_start:right0 - t_start +1]))
+        left0 = left
+        right0 = right
 
-    cut1 = pd.cut(df_records_sub[0], bins=rbins, include_lowest=True)
-    cut2 = pd.cut(df_ksp['duration'], bins=rbins, include_lowest=True)
+    n_path.append(sum(path_arr[left0-t_start:right0 - t_start +1]))        
+    cut_time.append(t_end+1)
+    
+    if df_records_sub[0].min()<=arr[0]:
+        cut_time.append(df_records_sub[0].min())
+    if df_records_sub[0].max()>arr[-1]:
+        cut_time.append(df_records_sub[0].max())
+    
+    cut_time = list(set(cut_time))
+    rbins = np.sort(cut_time)
+    
+    df_records_sub = df_records_sub.reset_index().drop(columns=['index'])
+    cut1 = pd.cut(df_records_sub[0], bins=rbins, include_lowest=True,right=False)
 
     count1 = cut1.value_counts()
-    count2 = cut2.value_counts()
     count1_s = count1.sort_index()
-    count2_s = count2.sort_index()
 
-    df_ksp['category'] = pd.cut(
-        df_ksp['duration'],
-        bins=rbins,
-        include_lowest=True)
-    df_ksp['bindex'] = pd.cut(
-        df_ksp['duration'],
-        bins=rbins,
-        include_lowest=True,
-        labels=False)
-    df_ksp = df_ksp.merge(
-        pd.DataFrame(
-            {
-                'category': (count1_s / count2_s).index,
-                'avg_counts': (count1_s / count2_s).values}),
-        how='inner',
-        on='category')
-    df_ksp['avg_counts'] = df_ksp['avg_counts'].astype(np.int)
-    df_ksp = df_ksp[df_ksp['avg_counts'] > 0]
+    beta = args
+    
+    df_path_all = pd.DataFrame()
+    for idx in count1_s[count1_s>0].index:
+        ti = idx.left
+        left0 = ti-buffer if ti-buffer> t_start else t_start
+        ti = idx.right
+        right0 = ti+buffer if ti+buffer < t_end else t_end
+        df_path = df_ksp[(df_ksp['duration']>=left0)&(df_ksp['duration']<right0)].copy()
+        
+        df_path = df_path.reset_index().drop(columns=['index'])
+        df_path['C'] = df_path['nroutes']-1
+        df_path['Cmin'] = df_path['C'].min()
+        df_path['deltaC'] = df_path['C']-df_path['Cmin']
 
-    return df_ksp
+        df_path['category'] = idx
+        
+        df_path.loc[:,'cost'] = beta[0]*df_path['duration'] + \
+                          beta[1]*(1-np.exp(-df_path['C']))/df_path['eudistance']*1000 # eudistance unit: km        
+        df_path['cost_max'] = df_path['cost'].max()
+
+        # The path with the largest probability of being chosen is the matched path
+        df_path['prob'] = 0
+        df_path.loc[np.abs(df_path['cost'] - df_path['cost_max'])<0.000001,'prob'] = 1
+        df_path = df_path[df_path['prob']==1]
+        df_path['prob'] /= len(df_path)
+        df_path['avg_counts'] = count1_s[idx]*df_path['prob']
+        df_path_all = df_path_all.append(df_path)
+
+    # count the number of trips on each matched path
+    df_path_all = df_path_all.groupby(by = [df_path_all['seq_stops'].astype(np.str_)
+                                          ,'duration'
+                                          ,'distance'
+                                          ,'nroutes'
+                                          ,df_path_all['seq_lines'].astype(np.str_)]
+                                      ,as_index=False
+                       ).apply(lambda x : pd.Series([
+                            x['seq_stops'].iloc[0]
+                            ,x['seq_lines'].iloc[0]
+                            ,np.sum(x['avg_counts'])
+                        ])).rename(columns={0:'seq_stops'
+                                            ,1:'seq_lines'
+                                            ,2:'avg_counts' })
+                                            
+    df_path_all['avg_counts'] = df_path_all['avg_counts'].astype(int)
+    df_path_all = df_path_all[df_path_all['avg_counts']>=0]
+    
+    return df_path_all
 
 
-def matching_OD_stations(G_relabeled, sid1, sid2, df_records, line_dict):
+def matching_OD_stations(G_relabeled, sid1, sid2, df_records, line_dict, dict_eudist, buffer, args):
     """
     Match the records with the paths between the origin station sid1 and
     destination station sid2 in the network.
@@ -81,7 +134,11 @@ def matching_OD_stations(G_relabeled, sid1, sid2, df_records, line_dict):
     df_records : a pandas dataframe of records between each pair of stations.
     line_dict : a dictionary that maps the line IDs in the network to the line
     IDs in the records.
-
+    dict_eudist : a dictionary that return the euclidean distance between a 
+    station pair.
+    buffer : time buffer for filtering candidate paths.
+    args : the parameters of the choice model (i.e., [beta0,beta1]).
+    
     Returns
     -------
     df_od_paths : a pandas dataframe containing all the matched paths between
@@ -125,28 +182,31 @@ def matching_OD_stations(G_relabeled, sid1, sid2, df_records, line_dict):
 
             # get the candidate paths in the network
             list_path, list_plen, list_dist, list_nroutes, list_lines, kpath = get_od_ksp_attr_all(
-                o_label, d_label, G_relabeled, kmax, max(list_records))
+                o_label, d_label, G_relabeled, kmax, max(list_records)+buffer)
             df_ksp = pd.DataFrame({
                 'seq_stops': list_path,
                 'duration': list_plen,
                 'distance': list_dist,
                 'nroutes': list_nroutes,
                 'seq_lines': list_lines,
-                'k': kpath
+                'k': kpath,
+                'eudistance':dict_eudist[(sid1,sid2)]
             })
             if(len(df_ksp) == 0):
                 continue
             try:
                 # route matching
-                df_ksp = route_cut(df_records_sub, df_ksp)
+                df_ksp = route_cost(df_records_sub, df_ksp, buffer, args)
                 df_od_paths = df_od_paths.append(df_ksp, ignore_index=True)
             except Exception as e:
                 print(o_label, d_label, e, 'route_cut')
 
     if(len(df_od_paths) > 0):
         try:
+            df_od_paths = df_od_paths.reset_index().drop(columns=['index'])
             df_od_paths['total'] = sum(df_od_paths['avg_counts'])
             df_od_paths['pathturns'] = None
+            df_od_paths['pathturns'] = df_od_paths['pathturns'].astype(object)
             for idx in df_od_paths.index:
                 list_path = df_od_paths['seq_stops'][idx]
                 list_lines = [key for i in range(0, len(
@@ -155,7 +215,7 @@ def matching_OD_stations(G_relabeled, sid1, sid2, df_records, line_dict):
                                   if k > 0 and list_lines[k] != list_lines[k - 1] and
                                   int(list_path[k].split('-')[1]) != sid1 and
                                   int(list_path[k].split('-')[1]) != sid2]
-                df_od_paths['pathturns'][idx] = list_pathturns
+                df_od_paths.loc[idx,'pathturns'] = pd.DataFrame({'pathturns':[list_pathturns]})['pathturns'].values
 
         except Exception as e:
             print("%s,%s,%s" % (o_label, d_label, e))
@@ -170,6 +230,9 @@ def matching(
         df_records,
         mat_width,
         line_dict,
+        dict_eudist,
+        buffer,
+        args,
         filename='log.txt'):
     """
     Match the records between each station pair in the network.
@@ -185,6 +248,10 @@ def matching(
     mat_width : the width of the result matrix.
     line_dict : A dictionary that maps the line ID in the network to the line ID
     in the records.
+    dict_eudist : a dictionary that return the euclidean distance between a 
+    station pair.
+    buffer : time buffer for filtering candidate paths.
+    args : the parameters of the choice model (i.e., [beta0,beta1]).
     filename : the file name of the output log. The default is 'log.txt'.
 
     Returns
@@ -219,7 +286,8 @@ def matching(
 
             # get the matched path between OD stations sid1 and sid2
             df_od_paths = matching_OD_stations(
-                G_relabeled, sid1, sid2, df_records, line_dict)
+                G_relabeled, sid1, sid2, df_records, line_dict, dict_eudist, buffer, args)
+
 
             # save in a matrix
             matrix_matched_path[sid1 - 1][sid2 - 1] = df_od_paths
@@ -230,15 +298,17 @@ def matching(
 if __name__ == "__main__":
 
     kmax = 200
-    files=[['bj','2019_402_284'],['sh','2015_431_320'],['sz','2017_376_248']]
+    files=[['bj','2019_402_284',[-0.00629 , -30.9936]],
+        ['sh','2015_431_320',[-0.00228 , -127.7]],
+        ['sz','2017_376_248',[-0.00311 , -113.2]]]
     city_idx = 0
     city_abbr = files[city_idx][0]
     suffix = files[city_idx][1]
-    
+    args = files[city_idx][2]
 
     # import data
     [G, G_relabeled, dualG, dual_nodes, dual_edges, H, H_relabeled, dualH, dualH_nodes, dualH_edges,
-        df_records] = load_variable('src_data/networks_with_records/data_G_'+city_abbr+'_card_' + suffix + '.pkl')
+        df_records, dict_eudist] = load_variable('src_data/networks_with_records/data_G_'+city_abbr+'_card_' + suffix + '.pkl')
     print(
         'data',
         'src_data/networks_with_records/data_G_'+city_abbr+'_card_' + suffix,
@@ -249,11 +319,13 @@ if __name__ == "__main__":
 
     # a dictionary that maps the line ID in the network to the line ID in the
     # records.
-    line_dict = {1: [1], 2: [2], 3: [4,93], 4: [5], 5: [6], 6: [7], 7: [8],
+    if city_abbr=='bj':
+        line_dict = {1: [1], 2: [2], 3: [4,93], 4: [5], 5: [6], 6: [7], 7: [8],
         8: [8], 9: [9], 10: [10,90], 11: [13], 12: [14], 13: [14], 14: [15],
         15: [16], 16: [91], 17: [97], 18: [94], 20: [95], 21: [98], 22: [89],
         23: [92], 24: [96]}  # for Beijing
-    # line_dict = {n[0]: [n[0]] for n in dualH_nodes} # for Shanghai, Shenzhen
+    else:
+        line_dict = {n[0]: [n[0]] for n in dualH_nodes} # for Shanghai, Shenzhen
 
     matrix_matched_path = matching(
         H_relabeled,
@@ -261,6 +333,9 @@ if __name__ == "__main__":
         df_records,
         mat_width,
         line_dict,
+        dict_eudist,
+        buffer,
+        args,
         'log.txt')
     save_variable(
         [matrix_matched_path],
