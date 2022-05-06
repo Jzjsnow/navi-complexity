@@ -3,9 +3,9 @@
 Functions for calculating LSI from k shortest paths (in Results section 3)
 Steps:
     1. Construct the sub-network for an OD station pair based on k shortest paths.
-    2. Calculate the entropy of the fastest simplest path (among the k paths) 
-    between the OD stations.
-    3. The entropy of the fastest simplest path is the station-level LSI of the
+    2. Calculate the entropy of the path with the largest probability of being 
+    chosen (among the k paths) between the OD stations.
+    3. The entropy of the chosen path is the station-level LSI of the
     OD stations.
     4. Get the line-level LSI by aggregating the entropy of all the matched paths
     between line pairs.
