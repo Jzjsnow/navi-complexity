@@ -28,7 +28,7 @@ Data to replicate the results of the paper (saved as python objects in pickle fi
 	* Shenzhen (sz): 8 snapshots.
 - networks_with_records: subway networks of three cities in the specific years with smart card data.
 	* Beijing (2019), Shanghai (2015), Shenzhen (2017).
-	* Due to a data non-disclosure agreement, 7 days of smart card records in Beijing and Shanghai, and 5 days in Shenzhen (all for Shenzhen) are shared in this data set for replication, please contact the authors for more data.
+	* 7 days of smart card records in Beijing and Shanghai, and 5 days in Shenzhen (all for Shenzhen) are shared in this data set for replication, please contact the authors for more data.
 - surveydata: 272 subway trips with known routes and duration through questionnaires in the three studied cities.
 - src_data: basic information used to initialize the code.
 - output: output data used to generate the figures in the paper.
