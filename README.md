@@ -33,5 +33,5 @@ Data to replicate the results of the paper (saved as python objects in pickle fi
 - src_data: basic information used to initialize the code.
 - output: output data used to generate the figures in the paper.
 
-Contact: zhuojun.jiang@pku.edu.cn
+Contact: snow.jiangzj@gmail.com
 
