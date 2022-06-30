@@ -164,19 +164,17 @@ def matching_OD_stations(G_relabeled, sid1, sid2, df_records, line_dict, dict_eu
 
             # Filter all records between station sid1 on line1 to station sid2 to line2
             list_records = []
-            list_recordid = []
             try:
-                df_od_records = df_records[(df_records[0] == sid1)
-                                           & (df_records[2] == sid2)
-                                           & (df_records[1].isin(line_dict[line1]))
-                                           & (df_records[3].isin(line_dict[line2]))]
+                df_od_records = df_records[(df_records['sid1'] == sid1)
+                                           & (df_records['sid2'] == sid2)
+                                           & (df_records['f_line'].isin(line_dict[line1]))
+                                           & (df_records['t_line'].isin(line_dict[line2]))]
                 for idx in df_od_records.index:
-                    list_records.extend(df_od_records[4][idx])
-                    list_recordid.extend(df_od_records[5][idx])
+                    list_records.extend(df_od_records['d_time'][idx])
             except Exception as e:
                 print(o_label, d_label, e)
             df_records_sub = pd.DataFrame(
-                {0: list_records, 'idx': list_recordid})
+                {0: list_records})
             if(len(df_records_sub) == 0):
                 continue
 
@@ -307,14 +305,34 @@ if __name__ == "__main__":
     args = files[city_idx][2]
 
     # import data
-    [G, G_relabeled, dualG, dual_nodes, dual_edges, H, H_relabeled, dualH, dualH_nodes, dualH_edges,
-        df_records, dict_eudist] = load_variable('src_data/networks_with_records/data_G_'+city_abbr+'_card_' + suffix + '.pkl')
-    print(
-        'data',
-        'src_data/networks_with_records/data_G_'+city_abbr+'_card_' + suffix,
-        'loaded')
+    
+    # read the subway network
+    H = nx.read_gml('src_data/networks/PrimalGraph_'+city_abbr+'_card.gml') 
+    dualH = nx.read_gml('src_data/networks/DualGraph_'+city_abbr+'_card.gml', destringizer=int) # read the information network
 
-    list_nodeid = [x for x in G.nodes]
+    dualH_nodes = list(dualH.nodes(data=True))
+    dualH_edges = list(dualH.edges(data=True,keys=True))
+    
+    # read the station list
+    tb = pd.read_csv('src_data/subway_info/stations_'+city_abbr+'.csv')
+    dict_stations = {tb['sid'].iloc[i]:tb['name'].iloc[i] for i in range(len(tb))}
+
+    # read the Euclidean distances between stations
+    tb = pd.read_csv('src_data/subway_info/Eudistance_'+city_abbr+'.csv') 
+    dict_eudist = {(tb['sid1'].iloc[i],tb['sid2'].iloc[i]):tb['Eudistance'].iloc[i]  for i in range(len(tb))} # Generate a dict() object
+    
+    # read the smart card data
+    tb = pd.read_csv('src_data/smart_card_data/'+city_abbr+'_'+snapshot+'.csv',index_col=0) 
+    Tconst = int(suffix[-3:]) # access/egress delay
+    tb = tb[tb['sid1']!=tb['sid2']]
+    df_records = tb.groupby(by = ['sid1','f_line','sid2','t_line'],as_index=False) \
+                   .apply(lambda x : pd.Series([
+                   (x['d_time']-Tconst).tolist()])) \
+                   .rename(columns={0:'d_time'})  # group the records by the starting and terminal stations
+    
+    print('data loaded')
+
+    list_nodeid = [x for x in dict_stations]
     mat_width = max(list_nodeid)
 
     # a dictionary that maps the line ID in the network to the line ID in the
@@ -327,8 +345,9 @@ if __name__ == "__main__":
     else:
         line_dict = {n[0]: [n[0]] for n in dualH_nodes} # for Shanghai, Shenzhen
 
+    buffer = 10
     matrix_matched_path = matching(
-        H_relabeled,
+        H,
         kmax,
         df_records,
         mat_width,

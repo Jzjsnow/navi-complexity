@@ -229,6 +229,7 @@ def merge_2_ij_matching(df_matched_paths):
 def merge_2_st_matching(
         G_relabeled,
         df_matched_paths,
+        mat_width,
         thres_C=None,
         count_weighted=False):
     """
@@ -245,6 +246,7 @@ def merge_2_st_matching(
                             sub-network.
                             'avg_counts': the number of trips (records)
                             matching the path.)
+    mat_width : width of result matrix (line-level search information).                        
     thres_C : if only paths with specific number of transfers C are used in the
     calculation, thres_C is set to the number of transfers included in the
     path. The default is None.
@@ -262,7 +264,7 @@ def merge_2_st_matching(
     list_sids = [list(set([int(node.split('-')[1])
                            for node in G_relabeled.nodes if int(node.split('-')[0]) == nid])) for nid in list_nid]
 
-    matrix_S_nid = np.zeros((max(list_nid), max(list_nid))) * np.nan
+    matrix_S_nid = np.zeros((mat_width, mat_width)) * np.nan
     for i in range(0, len(list_nid)):
         for j in range(0, len(list_nid)):
             sort_paths = df_matched_paths[(df_matched_paths['i'].isin(np.array(
@@ -305,18 +307,23 @@ if __name__ == "__main__":
     city_abbr = files[city_idx][0]
     suffix = files[city_idx][1]
 
-    [G,
-     G_relabeled,
-     dualG,
-     dualG_nodes,
-     dualG_edges,
-     H,
-     H_relabeled,
-     dualH,
-     dualH_nodes,
-     dualH_edges,
-     df_records,
-     dict_eudist] = load_variable('src_data/networks_with_records/data_G_'+city_abbr+'_card_' + suffix)
+    # import network data
+   
+    # read the subway network
+    H = nx.read_gml('src_data/networks/PrimalGraph_'+city_abbr+'_card.gml') 
+    dualH = nx.read_gml('src_data/networks/DualGraph_'+city_abbr+'_card.gml', destringizer=int) # read the information network
+
+    dualH_nodes = list(dualH.nodes(data=True))
+    dualH_edges = list(dualH.edges(data=True,keys=True))
+
+    # read the line list
+    tb = pd.read_csv('src_data/subway_info/lines_'+city_abbr+'.csv')
+    dict_lines = {tb['nid'].iloc[i]:tb['name'].iloc[i] for i in range(len(tb))}
+
+    # read the Euclidean distances between stations
+    tb = pd.read_csv('src_data/subway_info/Eudistance_'+city_abbr+'.csv') 
+    dict_eudist = {(tb['sid1'].iloc[i],tb['sid2'].iloc[i]):tb['Eudistance'].iloc[i]  for i in range(len(tb))} # Generate a dict() object
+
     print('data loaded')
 
     # import the matched paths
@@ -325,7 +332,7 @@ if __name__ == "__main__":
 
     # calculate the ESI of the matched paths
     df_matched_paths = LSI_from_matching(
-        H_relabeled,
+        H,
         dualH_nodes,
         dualH_edges,
         matrix_matched_path,
@@ -339,23 +346,28 @@ if __name__ == "__main__":
                   'output/ESI/res_stationlevel_'+city_abbr+'_card_' + suffix + '.pkl')
 
     # calculate the line-level ESI
+    max_line_id = max(dict_lines)
     matrix_S_sub_nid = merge_2_st_matching(
-        G_relabeled,
+        H,
         df_matched_paths,
+        max_line_id,
         count_weighted=True)
     matrix_S_sub_nid_C1 = merge_2_st_matching(
-        G_relabeled,
+        H,
         df_matched_paths,
+        max_line_id,
         thres_C=1,
         count_weighted=True)
     matrix_S_sub_nid_C2 = merge_2_st_matching(
-        G_relabeled,
+        H,
         df_matched_paths,
+        max_line_id,
         thres_C=2,
         count_weighted=True)
     matrix_S_sub_nid_C3 = merge_2_st_matching(
-        G_relabeled,
+        H,
         df_matched_paths,
+        max_line_id,
         thres_C=3,
         count_weighted=True)
 

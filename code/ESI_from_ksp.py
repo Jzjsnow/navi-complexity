@@ -290,9 +290,13 @@ def get_LSI_snapshot(city_abbr, mat_width, max_line_id, snapshot, kmax, dist_dic
     
     
     """
-    [G_sub, dualG_sub, dualG_nodes_sub, dualG_edges_sub] = \
-        load_variable('src_data/networks/data_G_'+city_abbr+'_' + snapshot)
+
+    G_sub = nx.read_gml('src_data/networks/PrimalGraph_'+city_abbr+'_'+snapshot+'.gml') # read the subway network
+    dualG_sub = nx.read_gml('src_data/networks/DualGraph_'+city_abbr+'_'+snapshot+'.gml', destringizer=int) # read the information network
     print(snapshot, 'data', 'loaded')
+
+    dualG_nodes_sub = list(dualG_sub.nodes(data=True))
+    dualG_edges_sub = list(dualG_sub.edges(data=True,keys=True))
 
     matrix_Ss_sub, matrix_nroutes_sub, matrix_pathlength_sub, matrix_pathdist_sub, matrix_Ktot_sub = subnetwork_analysis(
         G_sub, dualG_sub, dualG_nodes_sub, dualG_edges_sub, mat_width, kmax, dist_dict, args, filename="log/log.txt")
@@ -326,12 +330,13 @@ def get_LSI_snapshot(city_abbr, mat_width, max_line_id, snapshot, kmax, dist_dic
 
 if __name__ == "__main__":
 
-    # import network data
-    [timeline, list_city, city_idx, city, city_abbr,
-     G, G_relabeled, dualG, dualG_nodes, dualG_nodes_en, dualG_edges,
-     node_pos_proj, node_pos_proj_relabeled, line_pos, dict_eudist
-     ] = load_variable('src_data/initial_info_bj')
 
+    timelines = [
+        ['2003', '2004', '2007', '2008', '2009', '2011', '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2019', '2020'],
+        ['2000','2003','2004','2005','2006','2007','2008','2009','2010', '2011','2012','2013','2014','2015','2016','2017','2018','2020'], 
+        ['2004','2007','2009','2010','2011','2016','2019','2020']
+    ]
+    
     files=[['bj','2019_402_284',[-0.00629 , -30.9936]],
         ['sh','2015_431_320',[-0.00228 , -127.7]],
         ['sz','2017_376_248',[-0.00311 , -113.2]]]
@@ -341,9 +346,23 @@ if __name__ == "__main__":
     suffix = files[city_idx][1]
     args = files[city_idx][2]
     timeline = timelines[city_idx]
+    
+    
+    # read the line list
+    tb = pd.read_csv('src_data/subway_info/lines_'+city_abbr+'.csv')
+    dict_lines = {tb['nid'].iloc[i]:tb['name'].iloc[i] for i in range(len(tb))}
+    max_line_id = max(dict_lines)
+    
+    # read the station list
+    tb = pd.read_csv('src_data/subway_info/stations_'+city_abbr+'.csv')
+    dict_stations = {tb['sid'].iloc[i]:tb['name'].iloc[i] for i in range(len(tb))}
+    list_nodeid = [x for x in dict_stations]
+    mat_width = max(list_nodeid)
 
-    max_line_id = max(node[0] for node in dualG_nodes)
-    mat_width = max(G.nodes)
+    
+    # read the Euclidean distances between stations
+    tb = pd.read_csv('src_data/subway_info/Eudistance_'+city_abbr+'.csv') 
+    dict_eudist = {(tb['sid1'].iloc[i],tb['sid2'].iloc[i]):tb['Eudistance'].iloc[i]  for i in range(len(tb))} # Generate a dict() object
 
     # get LSI under each snapshot and save the results
     for snapshot in timeline:

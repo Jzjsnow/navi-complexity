@@ -180,7 +180,7 @@ def network_analysis(
     return matrix_S, matrix_nroutes, matrix_pathlength, matrix_pathdist
 
 
-def get_GSI_snapshot(city_abbr, mat_width, snapshot):
+def get_GSI_snapshot(city_abbr, mat_width, max_line_id, snapshot):
     """
     Get the station-level GSI and line-level GSI under each time snapshot and
     save the results
@@ -189,6 +189,7 @@ def get_GSI_snapshot(city_abbr, mat_width, snapshot):
     ----------
     city_abbr : abbreviation of the city name.
     mat_width : width of result matrix (station-level search information).
+    max_line_id :  width of result matrix (line-level search information).
     snapshot : string of a specific year.
 
     Returns
@@ -196,8 +197,15 @@ def get_GSI_snapshot(city_abbr, mat_width, snapshot):
     None.
 
     """
-    [G_sub, dualG_sub, dualG_nodes_sub, dualG_edges_sub] = \
-        load_variable('src_data/networks/data_G_'+city_abbr+'_' + snapshot)
+    
+    # read the subway network
+    G_sub = nx.read_gml('src_data/networks/PrimalGraph_'+city_abbr+'_'+snapshot+'.gml') 
+    dualG_sub = nx.read_gml('src_data/networks/DualGraph_'+city_abbr+'_'+snapshot+'.gml', destringizer=int) # read the information network
+    print(snapshot, 'data', 'loaded')
+
+    dualG_nodes_sub = list(dualG_sub.nodes(data=True))
+    dualG_edges_sub = list(dualG_sub.edges(data=True,keys=True))   
+
     N_sub = len(set([node.split('-')[1] for node in G_sub.nodes()]))
     N_Ktot = len(nx.Graph(dualG_sub).edges())
     matrix_Ss, matrix_nroutes, matrix_pathlength, matrix_pathdist = network_analysis(
@@ -238,14 +246,33 @@ def get_GSI_snapshot(city_abbr, mat_width, snapshot):
 if __name__ == "__main__":
 
     # import network data
-    [timeline, list_city, city_idx, city, city_abbr,
-     G, G_relabeled, dualG, dual_nodes, dual_nodes_en, dual_edges,
-     node_pos_proj, node_pos_proj_relabeled, line_pos
-     ] = load_variable('src_data/initial_info_bj')
+    timelines = [
+        ['2003', '2004', '2007', '2008', '2009', '2011', '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2019', '2020'],
+        ['2000','2003','2004','2005','2006','2007','2008','2009','2010', '2011','2012','2013','2014','2015','2016','2017','2018','2020'], 
+        ['2004','2007','2009','2010','2011','2016','2019','2020']
+    ]
+    
+    files=[['bj','2019_402_284',[-0.00629 , -30.9936]],
+        ['sh','2015_431_320',[-0.00228 , -127.7]],
+        ['sz','2017_376_248',[-0.00311 , -113.2]]]
+        
+    city_idx = 0
+    city_abbr = files[city_idx][0]
+    timeline = timelines[city_idx]
+    
 
-    max_line_id = max(node[0] for node in dual_nodes)
-    mat_width = max(G.nodes)
+    # read the line list
+    tb = pd.read_csv('src_data/subway_info/lines_'+city_abbr+'.csv')
+    dict_lines = {tb['nid'].iloc[i]:tb['name'].iloc[i] for i in range(len(tb))}
+    max_line_id = max(dict_lines)
+    
+    # read the station list
+    tb = pd.read_csv('src_data/subway_info/stations_'+city_abbr+'.csv')
+    dict_stations = {tb['sid'].iloc[i]:tb['name'].iloc[i] for i in range(len(tb))}
+    list_nodeid = [x for x in dict_stations]
+    mat_width = max(list_nodeid)
+
 
     # get GSI under each snapshot and save the results
     for snapshot in timeline:
-        get_GSI_snapshot(city_abbr, mat_width, snapshot)
+        get_GSI_snapshot(city_abbr, mat_width, max_line_id, snapshot)
