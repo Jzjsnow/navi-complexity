@@ -26,6 +26,7 @@ Each subway network (primal graph) and its information network (dual graph) are 
 |nid|line ID |int|
 |duration|the in-vehicle time of the section.|double|
 |distance|the Euclidean distance along the subway line between the connected stations.|double|
+
 \* If nid = 0, it means that the line connects the same station located on both lines, i.e. the station is a transfer station between the two lines. In this case, ‘duration’ of the line indicates the transfer delay and is set to 300(s) by default.
 \* If ‘yyyy’=‘card’, the network is used for route matching and the transfer delay is set specifically based on the smart card data (Beijing: 402s, Shanghai: 431 s, Shenzhen: 376 s).
 
