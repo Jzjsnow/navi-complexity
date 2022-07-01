@@ -31,6 +31,7 @@ Each subway network (primal graph) and its information network (dual graph) are 
 
 \* If ‘yyyy’=‘card’, the network is used for route matching and the transfer delay is set specifically based on the smart card data (Beijing: 402s, Shanghai: 431 s, Shenzhen: 376 s).
 
+&emsp;
 - DualGraph\_[bj/sh/sz]\_yyyy.gml: the information network of Beijing/Shanghai/Shenzhen in the year of ‘yyyy’. 
 
 	* Each node represents a subway line and is labelled by ‘nid’, where nid represents the line ID. The attribute ‘name’ denotes the name of the line.
