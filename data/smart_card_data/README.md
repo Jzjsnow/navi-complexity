@@ -18,7 +18,7 @@
 |tst\_name|name of the terminal subway station|string|
 |f\_tm|time stamp for entering the subway station|string|
 |t\_tm|time stamp for exiting the subway station|string|
-|d\_time|interval between the entry and exit timestamps|int|
+|d\_time|interval between the entry and exit timestamps (in seconds)|int|
 
 
 **Data example:**
