@@ -8,7 +8,7 @@ The attributes of subway lines and stations in Beijing/Shanghai/Shenzhen (by 202
 | :-: | :-: | :-: |
 |nid|identication of the subway line|int|
 |name|name of the subway line|string|
-|list of full\_names|full names of the line that distinguishes the direction (marked by the starting and terminal station)|string[]|
+|full\_names|list of full names of the line that distinguishes the direction (marked by the starting and terminal station)|string[]|
 
 **Data example:**
 
