@@ -308,7 +308,9 @@ if __name__ == "__main__":
     
     # read the subway network
     H = nx.read_gml('src_data/networks/PrimalGraph_'+city_abbr+'_card.gml') 
-    dualH = nx.read_gml('src_data/networks/DualGraph_'+city_abbr+'_card.gml', destringizer=int) # read the information network
+    
+    # read the information network
+    dualH = nx.read_gml('src_data/networks/DualGraph_'+city_abbr+'_card.gml', destringizer=int) 
 
     dualH_nodes = list(dualH.nodes(data=True))
     dualH_edges = list(dualH.edges(data=True,keys=True))
