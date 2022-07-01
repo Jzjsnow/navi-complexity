@@ -22,15 +22,15 @@ Python codes to replicate the results of the paper:
 
 ## Data
 Data to replicate the results of the paper:
-- [smart_card_data](https://github.com/Jzjsnow/navi-complexity/blob/main/data/smart_card_data/README.md): 7 days of smart card records in Beijing and Shanghai, and 5 days in Shenzhen (all for Shenzhen) are shared in this data set for replication.
+- [smart_card_data](https://github.com/Jzjsnow/navi-complexity/blob/main/data/smart_card_data): 7 days of smart card records in Beijing and Shanghai, and 5 days in Shenzhen (all for Shenzhen) are shared in this data set for replication.
 	* bj_2019.csv: Beijing subway from 2019/5/15-2019/5/21.
 	* sh_2015.csv: Shanghai subway from 2015/4/15-2015/4/21.
 	* sz_2017.csv: Shenzhen subway from 2017/10/16-2017/10/20.
-- [subway_info](https://github.com/Jzjsnow/navi-complexity/blob/main/data/subway_info/README.md): attributes of subway lines and stations in Beijing/Shanghai/Shenzhen (by 2020).
+- [subway_info](https://github.com/Jzjsnow/navi-complexity/blob/main/data/subway_info): attributes of subway lines and stations in Beijing/Shanghai/Shenzhen (by 2020).
 	* lines_[bj/sh/sz].csv: list of subway lines.
 	* stations_[bj/sh/sz].csv: list of subway stations.
 	* Eudistance_[bj/sh/sz].csv: Euclidean distance between each station pair.
-- [networks](https://github.com/Jzjsnow/navi-complexity/blob/main/data/networks/README.md): subway networks of three cities from 2000 to 2020.
+- [networks](https://github.com/Jzjsnow/navi-complexity/blob/main/data/networks): subway networks of three cities from 2000 to 2020.
 	* Beijing (bj): 15 snapshots.
 	* Shanghai (sh): 18 snapshots.
 	* Shenzhen (sz): 8 snapshots.
