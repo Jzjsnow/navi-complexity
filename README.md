@@ -26,7 +26,7 @@ Data to replicate the results of the paper:
 	* bj_2019.csv: Beijing subway from 2019/5/15-2019/5/21.
 	* sh_2015.csv: Shanghai subway from 2015/4/15-2015/4/21.
 	* sz_2017.csv: Shenzhen subway from 2017/10/16-2017/10/20.
-- subway_info: attributes of subway lines and stations in Beijing/Shanghai/Shenzhen (by 2020)
+- subway_info: attributes of subway lines and stations in Beijing/Shanghai/Shenzhen (by 2020).
 	* lines_[bj/sh/sz].csv: list of subway lines.
 	* stations_[bj/sh/sz].csv: list of subway stations.
 	* Eudistance_[bj/sh/sz].csv: Euclidean distance between each station pair.
@@ -34,7 +34,7 @@ Data to replicate the results of the paper:
 	* Beijing (bj): 15 snapshots.
 	* Shanghai (sh): 18 snapshots.
 	* Shenzhen (sz): 8 snapshots.
-	* Each subway network and its information network are separately constructed by [networkx](https://networkx.org/) graph models and saved in GML format .
+	* Each subway network and its information network are separately constructed by [networkx](https://networkx.org/) graph models and saved in GML format.
 - surveydata: 272 subway trips with known routes and duration through questionnaires in the three studied cities.
 - flow_official: the official ridership of the Beijing subway for May 2019.
 - src_data: basic information used to initialize the code.
