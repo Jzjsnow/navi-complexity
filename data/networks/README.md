@@ -10,7 +10,7 @@ The subway networks of Beijing/Shanghai/Shenzhen from 2000 to 2020 are shared in
 
 ## Methodological Information
 
-Each subway network (primal graph) and its information network (dual graph) are separately constructed by networkx graph models (https://networkx.org/) and saved in GML format.
+Each subway network (primal graph) and its information network (dual graph) are separately constructed by [networkx](https://networkx.org/) graph models and saved in [GML](https://web.archive.org/web/20190207140002/http://www.fim.uni-passau.de/index.php?id=17297&L=1) format.
 
 ## Data-specific Information
 
