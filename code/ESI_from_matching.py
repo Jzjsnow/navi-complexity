@@ -54,7 +54,7 @@ def merge_paths(df_all_paths):
     return df_od_paths
 
 
-def LSI_btw_ij(
+def ESI_btw_ij(
         df_all_paths,
         sid1,
         sid2,
@@ -115,7 +115,7 @@ def LSI_btw_ij(
     return None
 
 
-def LSI_from_matching(
+def ESI_from_matching(
         G_relabeled,
         dualG_nodes,
         dualG_edges,
@@ -157,7 +157,7 @@ def LSI_from_matching(
         for sid2 in list_stationid:
             try:
                 df_all_paths = matrix_matched_path[sid1 - 1][sid2 - 1]
-                df_matched_paths0 = LSI_btw_ij(
+                df_matched_paths0 = ESI_btw_ij(
                     df_all_paths, sid1, sid2, G_relabeled, dualG_nodes, dualG_edges)
                 df_matched_paths = df_matched_paths.append(df_matched_paths0)
 
@@ -185,7 +185,7 @@ def weighted_avg_and_std(values, weights):
 
 def merge_2_ij_matching(df_matched_paths):
     """
-    Get the station-level search information (LSI).
+    Get the station-level search information (ESI).
     The aggregation uses the entropy and flow weights of all the
     matched paths between station pairs
 
@@ -196,7 +196,7 @@ def merge_2_ij_matching(df_matched_paths):
 
     Returns
     -------
-    df_Ss_i_j : station-level LSI for each OD station pair.
+    df_Ss_i_j : station-level ESI for each OD station pair.
     
     """
     df_Ss_i_j = df_matched_paths.groupby(
@@ -233,7 +233,7 @@ def merge_2_st_matching(
         thres_C=None,
         count_weighted=False):
     """
-    Get the line-level search information (LSI).
+    Get the line-level search information (ESI).
     The aggregation uses the entropy and flow weights of all the
     matched paths between line pairs
 
@@ -255,7 +255,7 @@ def merge_2_st_matching(
 
     Returns
     -------
-    matrix_S_nid : line-level LSI between each line pair.
+    matrix_S_nid : line-level ESI between each line pair.
 
     """
 
@@ -331,7 +331,7 @@ if __name__ == "__main__":
         'output/matrix_matched_path_' + suffix + '.pkl')
 
     # calculate the ESI of the matched paths
-    df_matched_paths = LSI_from_matching(
+    df_matched_paths = ESI_from_matching(
         H,
         dualH_nodes,
         dualH_edges,

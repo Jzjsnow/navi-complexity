@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Functions for calculating global search information (GSI) according to ref. [1]
+Functions for calculating global search information (TSI) according to ref. [1]
 (in Results section 2, 3)
 
 [1] Gallotti, R., Porter,  M.  A.  & Barthelemy, M. Lost in transportation:
@@ -91,8 +91,8 @@ def network_analysis(
         mat_width,
         filename=''):
     """
-    Get the station-level GSI.
-    The station-level GSI measures the information needed to locate the fastest
+    Get the station-level TSI.
+    The station-level TSI measures the information needed to locate the fastest
     simplest paths between station pairs.
     Simplest path: the path with the fewest transfers.
 
@@ -106,7 +106,7 @@ def network_analysis(
 
     Returns
     -------
-    matrix_S : the GSI between each station pair.
+    matrix_S : the TSI between each station pair.
     matrix_nroutes : the number of lines included in the fastest simplest path
     of each station pair.
     matrix_pathlength : the travel time of the fastest simplest path of each
@@ -180,9 +180,9 @@ def network_analysis(
     return matrix_S, matrix_nroutes, matrix_pathlength, matrix_pathdist
 
 
-def get_GSI_snapshot(city_abbr, mat_width, max_line_id, snapshot):
+def get_TSI_snapshot(city_abbr, mat_width, max_line_id, snapshot):
     """
-    Get the station-level GSI and line-level GSI under each time snapshot and
+    Get the station-level TSI and line-level TSI under each time snapshot and
     save the results
 
     Parameters
@@ -238,9 +238,9 @@ def get_GSI_snapshot(city_abbr, mat_width, max_line_id, snapshot):
                    matrix_S_nid_C1,
                    matrix_S_nid_C2,
                    matrix_S_nid_C3],
-                  'output/GSI/'+city_abbr+'_' + snapshot + '.pkl')
+                  'output/TSI/'+city_abbr+'_' + snapshot + '.pkl')
 
-    print('save in', 'output/GSI/'+city_abbr+'_' + snapshot)
+    print('save in', 'output/TSI/'+city_abbr+'_' + snapshot)
 
 
 if __name__ == "__main__":
@@ -273,6 +273,6 @@ if __name__ == "__main__":
     mat_width = max(list_nodeid)
 
 
-    # get GSI under each snapshot and save the results
+    # get TSI under each snapshot and save the results
     for snapshot in timeline:
-        get_GSI_snapshot(city_abbr, mat_width, max_line_id, snapshot)
+        get_TSI_snapshot(city_abbr, mat_width, max_line_id, snapshot)

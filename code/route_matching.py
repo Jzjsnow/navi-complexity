@@ -324,13 +324,19 @@ if __name__ == "__main__":
     dict_eudist = {(tb['sid1'].iloc[i],tb['sid2'].iloc[i]):tb['Eudistance'].iloc[i]  for i in range(len(tb))} # Generate a dict() object
     
     # read the smart card data
-    tb = pd.read_csv('src_data/smart_card_data/'+city_abbr+'_'+snapshot+'.csv',index_col=0) 
+    tb = pd.read_csv('src_data/smart_card_data/'+city_abbr+'_'+snapshot+'.csv') 
     Tconst = int(suffix[-3:]) # access/egress delay
-    tb = tb[tb['sid1']!=tb['sid2']]
-    df_records = tb.groupby(by = ['sid1','f_line','sid2','t_line'],as_index=False) \
+
+    # group the records by the starting/terminal stations and store the sequence of travel times in the 'd_time' column
+    df_records = tb.groupby(by = ['sid1','f_line','sid2','t_line']
+                   ,as_index=False) \
                    .apply(lambda x : pd.Series([
-                   (x['d_time']-Tconst).tolist()])) \
-                   .rename(columns={0:'d_time'})  # group the records by the starting and terminal stations
+                   [x['d_time'].values[i]-Tconst  # subtract the access/egress delay in advance 
+                       for i in range(len(x))
+                       for j in range(x['count'].values[i])
+                   ]
+                   ])) \
+                   .rename(columns={0:'d_time'})  
     
     print('data loaded')
 

@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 """
-Functions for calculating LSI from k shortest paths (in Results section 3)
+Functions for calculating ESI from k shortest paths (in Results section 3)
 Steps:
     1. Construct the sub-network for an OD station pair based on k shortest paths.
     2. Calculate the entropy of the path with the largest probability of being 
     chosen (among the k paths) between the OD stations.
-    3. The entropy of the chosen path is the station-level LSI of the
+    3. The entropy of the chosen path is the station-level ESI of the
     OD stations.
-    4. Get the line-level LSI by aggregating the entropy of all the matched paths
+    4. Get the line-level ESI by aggregating the entropy of all the matched paths
     between line pairs.
 
 """
@@ -162,8 +162,8 @@ def subnetwork_analysis(
         args,
         filename='dual_log.txt'):
     """
-    Get the station-level LSI.
-    The station-level LSI measures the information needed to locate the fastest
+    Get the station-level ESI.
+    The station-level ESI measures the information needed to locate the fastest
     simplest paths in the sub-networks between station pairs
 
     Parameters
@@ -181,7 +181,7 @@ def subnetwork_analysis(
     
     Returns
     -------
-    matrix_S : the LSI between each station pair.
+    matrix_S : the ESI between each station pair.
     matrix_nroutes : the number of lines included in the fastest simplest path
     of each station pair.
     matrix_pathlength : the travel time of the fastest simplest path of each
@@ -271,9 +271,9 @@ def subnetwork_analysis(
     return matrix_S, matrix_nroutes, matrix_pathlength, matrix_pathdist, matrix_Ktot
 
 
-def get_LSI_snapshot(city_abbr, mat_width, max_line_id, snapshot, kmax, dist_dict, args, suffix):
+def get_ESI_snapshot(city_abbr, mat_width, max_line_id, snapshot, kmax, dist_dict, args, suffix):
     """
-    Get the station-level LSI and line-level GSI under each time snapshot and
+    Get the station-level ESI and line-level GSI under each time snapshot and
     save the results
 
     Parameters
@@ -324,8 +324,8 @@ def get_LSI_snapshot(city_abbr, mat_width, max_line_id, snapshot, kmax, dist_dic
                    matrix_S_sub_nid_C3,
                    matrix_Ktot_st_C3_sub,
                    ],
-                  'output/LSI/ksp_' + str(kmax) + '_'+city_abbr+'_' + suffix)
-    print('save in', 'output/LSI/ksp_' + str(kmax) + '_'+city_abbr+'_' + suffix)
+                  'output/ESI/ksp_' + str(kmax) + '_'+city_abbr+'_' + suffix)
+    print('save in', 'output/ESI/ksp_' + str(kmax) + '_'+city_abbr+'_' + suffix)
 
 
 if __name__ == "__main__":
@@ -364,8 +364,8 @@ if __name__ == "__main__":
     tb = pd.read_csv('src_data/subway_info/Eudistance_'+city_abbr+'.csv') 
     dict_eudist = {(tb['sid1'].iloc[i],tb['sid2'].iloc[i]):tb['Eudistance'].iloc[i]  for i in range(len(tb))} # Generate a dict() object
 
-    # get LSI under each snapshot and save the results
+    # get ESI under each snapshot and save the results
     for snapshot in timeline:
-        get_LSI_snapshot(city_abbr, mat_width, max_line_id, snapshot, 11, dict_eudist, args, snapshot + '.pkl')
-        get_LSI_snapshot(city_abbr, mat_width, max_line_id, snapshot, 13, dict_eudist, args, snapshot + '.pkl')
-        get_LSI_snapshot(city_abbr, mat_width, max_line_id, snapshot, 15, dict_eudist, args, snapshot + '.pkl')
+        get_ESI_snapshot(city_abbr, mat_width, max_line_id, snapshot, 11, dict_eudist, args, snapshot + '.pkl')
+        get_ESI_snapshot(city_abbr, mat_width, max_line_id, snapshot, 13, dict_eudist, args, snapshot + '.pkl')
+        get_ESI_snapshot(city_abbr, mat_width, max_line_id, snapshot, 15, dict_eudist, args, snapshot + '.pkl')
