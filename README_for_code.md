@@ -6,7 +6,7 @@ Codes for paper "Quantifying navigation complexity in transportation networks".
   * [Data requirements](#data-requirements)
   * [Code requirements](#code-requirements)
   * [Usage](#usage)
-- [Calculate the empirical search information(ESI)](#calculate-the-empirical-search-informationesi)
+- [Calculate the empirical search information (ESI)](#calculate-the-empirical-search-information-esi)
   * [From the matched paths](#from-the-matched-paths)
     + [Data requirements](#data-requirements-1)
     + [Code requirements](#code-requirements-1)
@@ -15,7 +15,7 @@ Codes for paper "Quantifying navigation complexity in transportation networks".
     + [Data requirements](#data-requirements-2)
     + [Code requirements](#code-requirements-2)
     + [Usage](#usage-2)
-- [Calculate the theoretical search information(TSI)](#calculate-the-theoretical-search-informationtsi)
+- [Calculate the theoretical search information (TSI)](#calculate-the-theoretical-search-information-tsi)
   * [Data requirements](#data-requirements-3)
   * [Code requirements](#code-requirements-3)
   * [Usage](#usage-3)
@@ -34,15 +34,11 @@ Calculate the matched paths from the OD records.
 
 ### Data requirements
 
-- station list:
-	* stations_[bj/sh/sz].csv
-- subway/information networks:
-	* PrimalGraph_[bj/sh/sz]_card.gml
-	* DualGraph_[bj/sh/sz]_card.gml	
-- Euclidean distances between stations:
-	* Eudistance_[bj/sh/sz].csv
-- smart card data:
-	* smart_card_data/[bj/sh/sz]_yyyy.csv
+- stations_[bj/sh/sz].csv: station list
+- PrimalGraph_[bj/sh/sz]\_yyyy.gml: subway networks
+- DualGraph_[bj/sh/sz]\_yyyy.gml: information networks
+- Eudistance_[bj/sh/sz].csv: Euclidean distances between stations
+- smart_card_data/[bj/sh/sz]\_yyyy.csv: smart card data
 
 ### Code requirements
 - route_matching.py
@@ -53,9 +49,9 @@ Calculate the matched paths from the OD records.
 
 To generate the route matching results (data/output/ESI/matrix_matched_path_[suffix]) using the provided scripts, run in the terminal:
 ```linux
-$ python route_matching.py # The target city can be changed by modifying the file
+$ python route_matching.py # The target city can be changed by editing the script
 ```
-The output will be in `output/ESI`.
+The output will be in `output/ESI`. The format of the output can also be changed by editing the script.
 
 Load the output in python
 ```python
@@ -64,25 +60,21 @@ Load the output in python
     'output/ESI/matrix_matched_path_2019_402_284.pkl') # results for Beijing subway
 ```
 
-View the match paths between the station pair sid1-sid2(stations 1-15 for example)
+View the match paths between the station pair sid1-sid2 (stations 1-15 for example)
 ```python
 >>> matrix_matched_path[1-1][15-1] # return a dataframe of matched paths between the station pair.
 ```
 
-## Calculate the empirical search information(ESI) 
+## Calculate the empirical search information (ESI) 
 
 ### From the matched paths
 
 #### Data requirements
-- subway line list:
-	* lines_[bj/sh/sz].csv
-- subway/information networks:
-	* PrimalGraph_[bj/sh/sz]_card.gml
-	* DualGraph_[bj/sh/sz]_card.gml
-- Euclidean distances between stations:
-	* Eudistance_[bj/sh/sz].csv
-- matched paths:
-	* matrix_matched_path_[suffix].pkl
+- lines_[bj/sh/sz].csv: subway line list
+- PrimalGraph_[bj/sh/sz]\_yyyy.gml: subway networks
+- DualGraph_[bj/sh/sz]\_yyyy.gml: information networks
+- Eudistance_[bj/sh/sz].csv: Euclidean distances between stations
+- matrix_matched_path_[suffix].pkl: matched paths
 	
 #### Code requirements
 - ESI_from_matching.py
@@ -96,7 +88,7 @@ To generate the route matching results using the provided scripts, run in the te
 ```linux
 $ python ESI_from_matching.py
 ```
-The output will be in `output/ESI`.
+The output will be in `output/ESI`. The format of the output can also be changed by editing the script.
 
 
 View the output of the station-level ESI in python
@@ -123,15 +115,11 @@ View the output of the line-level ESI
 
 #### Data requirements
 
-- station list:
-	* stations_[bj/sh/sz].csv	
-- line list:
-	* lines_[bj/sh/sz].csv
-- subway/information networks:
-	* PrimalGraph_[bj/sh/sz]_yyyy.gml
-	* DualGraph_[bj/sh/sz]_yyyy.gml
-- Euclidean distances between stations:
-	* Eudistance_[bj/sh/sz].csv
+- stations_[bj/sh/sz].csv: station list
+- lines_[bj/sh/sz].csv: subway line list
+- PrimalGraph_[bj/sh/sz]\_yyyy.gml: subway networks
+- DualGraph_[bj/sh/sz]\_yyyy.gml: information networks
+- Eudistance_[bj/sh/sz].csv: Euclidean distances between stations
 
 	
 #### Code requirements
@@ -146,7 +134,7 @@ To generate the route matching results using the provided scripts, run in the te
 ```linux
 $ python ESI_from_ksp.py
 ```
-The output will be in `output/ESI`.
+The output will be in `output/ESI`.  The format of the output can also be changed by editing the script.
 
 
 Load the output in python
@@ -180,19 +168,15 @@ View the line-level ESI between each line pair with C=2 transfers
 ```	
 
 
-## Calculate the theoretical search information(TSI) 
+## Calculate the theoretical search information (TSI) 
 Reproduce the amount of theoretical global search information according to [Gallotti et al, 2016](https://www.science.org/doi/10.1126/sciadv.1500445).
 
 ### Data requirements
 
-- station list:
-	* stations_[bj/sh/sz].csv	
-- line list:
-	* lines_[bj/sh/sz].csv
-- subway/information networks:
-	* PrimalGraph_[bj/sh/sz]_yyyy.gml
-	* DualGraph_[bj/sh/sz]_yyyy.gml
-
+- stations_[bj/sh/sz].csv: station list	
+- line list: lines_[bj/sh/sz].csv
+- PrimalGraph_[bj/sh/sz]\_yyyy.gml: subway networks
+- DualGraph_[bj/sh/sz]\_yyyy.gml: information networks
 	
 ### Code requirements
 - TSI.py
@@ -206,7 +190,7 @@ To generate the route matching results using the provided scripts, run in the te
 ```linux
 $ python TSI.py
 ```
-The output will be in `output/TSI`.
+The output will be in `output/TSI`. The format of the output can also be changed by editing the script.
 
 
 Load the output in python
