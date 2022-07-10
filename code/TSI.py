@@ -263,12 +263,14 @@ if __name__ == "__main__":
 
     # read the line list
     tb = pd.read_csv('src_data/subway_info/lines_'+city_abbr+'.csv')
-    dict_lines = {tb['nid'].iloc[i]:tb['name'].iloc[i] for i in range(len(tb))}
+    dict_lines = {tb['lineid'].iloc[i]:tb['linename'].iloc[i] for i in range(len(tb))}
+
     max_line_id = max(dict_lines)
     
     # read the station list
     tb = pd.read_csv('src_data/subway_info/stations_'+city_abbr+'.csv')
-    dict_stations = {tb['sid'].iloc[i]:tb['name'].iloc[i] for i in range(len(tb))}
+    dict_stations = {tb['stationid'].iloc[i]:tb['stationname'].iloc[i] for i in range(len(tb))}
+    
     list_nodeid = [x for x in dict_stations]
     mat_width = max(list_nodeid)
 

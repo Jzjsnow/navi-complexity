@@ -318,12 +318,12 @@ if __name__ == "__main__":
 
     # read the line list
     tb = pd.read_csv('src_data/subway_info/lines_'+city_abbr+'.csv')
-    dict_lines = {tb['nid'].iloc[i]:tb['name'].iloc[i] for i in range(len(tb))}
+    dict_lines = {tb['lineid'].iloc[i]:tb['linename'].iloc[i] for i in range(len(tb))}
 
     # read the Euclidean distances between stations
-    tb = pd.read_csv('src_data/subway_info/Eudistance_'+city_abbr+'.csv') 
-    dict_eudist = {(tb['sid1'].iloc[i],tb['sid2'].iloc[i]):tb['Eudistance'].iloc[i]  for i in range(len(tb))} # Generate a dict() object
-
+    tb = pd.read_csv('src_data/subway_info/Eudist_'+city_abbr+'.csv') 
+    dict_eudist = {(tb['stationid_o'].iloc[i],tb['stationid_d'].iloc[i]):tb['Eudistance'].iloc[i]  for i in range(len(tb))} # Generate a dict() object
+    
     print('data loaded')
 
     # import the matched paths
@@ -343,7 +343,7 @@ if __name__ == "__main__":
 
     # save
     save_variable([df_matched_paths, df_Ss_i_j],
-                  'output/ESI/res_stationlevel_'+city_abbr+'_card_' + suffix + '.pkl')
+                  'output/ESI/res_stationlevel_card_' + city_abbr + '_' + suffix[:4] + '.pkl')
 
     # calculate the line-level ESI
     max_line_id = max(dict_lines)
@@ -376,4 +376,4 @@ if __name__ == "__main__":
                    matrix_S_sub_nid_C1,
                    matrix_S_sub_nid_C2,
                    matrix_S_sub_nid_C3,
-                   ], 'output/ESI/res_linelevel_card_' + suffix + '.pkl')
+                   ], 'output/ESI/res_linelevel_card_' + city_abbr + '_' + suffix[:4] + '.pkl')

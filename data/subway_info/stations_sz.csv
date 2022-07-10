@@ -1,4 +1,4 @@
-sid,name,linesid,lines,lat,lng
+stationid,stationname,lineids,linenames,lat,lng
 1,HUAQIANG ROAD,{1},"{""LINE 1""}",22.54312835,114.0800812
 2,HOURUI,{1},"{""LINE 1""}",22.63170074,113.8304801
 3,GUOMAO,{1},"{""LINE 1""}",22.5424072,114.1136413

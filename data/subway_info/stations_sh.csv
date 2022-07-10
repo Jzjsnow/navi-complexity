@@ -1,4 +1,4 @@
-sid,name,linesid,lines,lat,lng
+stationid,stationname,lineids,linenames,lat,lng
 1,XINZHA ROAD,{1},"{""LINE 1""}",31.240586222004,121.463750932475
 2,LIANHUA  ROAD,{1},"{""LINE 1""}",31.1327503599606,121.398147977796
 3,WENSHUI ROAD,{1},"{""LINE 1""}",31.294522314645,121.445544945438

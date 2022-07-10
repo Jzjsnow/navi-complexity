@@ -167,8 +167,8 @@ def matching_OD_stations(G_relabeled, sid1, sid2, df_records, line_dict, dict_eu
             try:
                 df_od_records = df_records[(df_records['sid1'] == sid1)
                                            & (df_records['sid2'] == sid2)
-                                           & (df_records['f_line'].isin(line_dict[line1]))
-                                           & (df_records['t_line'].isin(line_dict[line2]))]
+                                           & (df_records['lineid_o'].isin(line_dict[line1]))
+                                           & (df_records['lineid_d'].isin(line_dict[line2]))]
                 for idx in df_od_records.index:
                     list_records.extend(df_od_records['d_time'][idx])
             except Exception as e:
@@ -310,25 +310,26 @@ if __name__ == "__main__":
     H = nx.read_gml('src_data/networks/PrimalGraph_'+city_abbr+'_card.gml') 
     
     # read the information network
-    dualH = nx.read_gml('src_data/networks/DualGraph_'+city_abbr+'_card.gml', destringizer=int) 
+    dualH = nx.read_gml('src_data/networks/DualGraph_'+city_abbr+'_card.gml', destringizer=int)  # the network is used for route matching and the transfer delay is set specifically based on the smart card data (Beijing: 402s, Shanghai: 431s, Shenzhen: 376s).
+
 
     dualH_nodes = list(dualH.nodes(data=True))
     dualH_edges = list(dualH.edges(data=True,keys=True))
     
     # read the station list
     tb = pd.read_csv('src_data/subway_info/stations_'+city_abbr+'.csv')
-    dict_stations = {tb['sid'].iloc[i]:tb['name'].iloc[i] for i in range(len(tb))}
+    dict_stations = {tb['stationid'].iloc[i]:tb['stationname'].iloc[i] for i in range(len(tb))}
 
     # read the Euclidean distances between stations
-    tb = pd.read_csv('src_data/subway_info/Eudistance_'+city_abbr+'.csv') 
-    dict_eudist = {(tb['sid1'].iloc[i],tb['sid2'].iloc[i]):tb['Eudistance'].iloc[i]  for i in range(len(tb))} # Generate a dict() object
+    tb = pd.read_csv('src_data/subway_info/Eudist_'+city_abbr+'.csv') 
+    dict_eudist = {(tb['stationid_o'].iloc[i],tb['stationid_d'].iloc[i]):tb['Eudistance'].iloc[i]  for i in range(len(tb))} # Generate a dict() object
     
     # read the smart card data
     tb = pd.read_csv('src_data/smart_card_data/'+city_abbr+'_'+snapshot+'.csv') 
     Tconst = int(suffix[-3:]) # access/egress delay
 
     # group the records by the starting/terminal stations and store the sequence of travel times in the 'd_time' column
-    df_records = tb.groupby(by = ['sid1','f_line','sid2','t_line']
+    df_records = tb.groupby(by = ['stationid_o','lineid_o','stationid_d','lineid_d']
                    ,as_index=False) \
                    .apply(lambda x : pd.Series([
                    [x['d_time'].values[i]-Tconst  # subtract the access/egress delay in advance 
@@ -336,7 +337,7 @@ if __name__ == "__main__":
                        for j in range(x['count'].values[i])
                    ]
                    ])) \
-                   .rename(columns={0:'d_time'})  
+                   .rename(columns={0:'d_time','stationid_o':'sid1','stationid_d':'sid2'})  
     
     print('data loaded')
 
@@ -367,5 +368,5 @@ if __name__ == "__main__":
     save_variable(
         [matrix_matched_path],
         'output/matrix_matched_path_' +
-        suffix +
+        city_abbr + '_' + suffix[:4] +
         '.pkl')

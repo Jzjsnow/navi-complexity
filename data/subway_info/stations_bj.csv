@@ -1,4 +1,4 @@
-sid,name,linesid,lines,lat,lng
+stationid,stationname,lineids,linenames,lat,lng
 1,MUXIDI,{1},"{""LINE 1""}",39.90614419,116.3313326
 2,GUCHENG,{1},"{""LINE 1""}",39.90615316,116.1844542
 3,TIAN'ANMENDONG,{1},"{""LINE 1""}",39.90633242,116.3952964

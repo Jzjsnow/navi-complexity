@@ -350,20 +350,22 @@ if __name__ == "__main__":
     
     # read the line list
     tb = pd.read_csv('src_data/subway_info/lines_'+city_abbr+'.csv')
-    dict_lines = {tb['nid'].iloc[i]:tb['name'].iloc[i] for i in range(len(tb))}
+    dict_lines = {tb['lineid'].iloc[i]:tb['linename'].iloc[i] for i in range(len(tb))}
+
     max_line_id = max(dict_lines)
     
     # read the station list
     tb = pd.read_csv('src_data/subway_info/stations_'+city_abbr+'.csv')
-    dict_stations = {tb['sid'].iloc[i]:tb['name'].iloc[i] for i in range(len(tb))}
+    dict_stations = {tb['stationid'].iloc[i]:tb['stationname'].iloc[i] for i in range(len(tb))}
+
     list_nodeid = [x for x in dict_stations]
     mat_width = max(list_nodeid)
 
     
     # read the Euclidean distances between stations
-    tb = pd.read_csv('src_data/subway_info/Eudistance_'+city_abbr+'.csv') 
-    dict_eudist = {(tb['sid1'].iloc[i],tb['sid2'].iloc[i]):tb['Eudistance'].iloc[i]  for i in range(len(tb))} # Generate a dict() object
-
+    tb = pd.read_csv('src_data/subway_info/Eudist_'+city_abbr+'.csv') 
+    dict_eudist = {(tb['stationid_o'].iloc[i],tb['stationid_d'].iloc[i]):tb['Eudistance'].iloc[i]  for i in range(len(tb))} # Generate a dict() object
+    
     # get ESI under each snapshot and save the results
     for snapshot in timeline:
         get_ESI_snapshot(city_abbr, mat_width, max_line_id, snapshot, 11, dict_eudist, args, snapshot + '.pkl')
