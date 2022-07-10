@@ -315,8 +315,8 @@ Data to replicate the results of the paper.
 	* Shenzhen (sz): 8 snapshots.
 - [surveydata](https://github.com/Jzjsnow/navi-complexity/blob/main/data/surveydata.csv): 272 subway trips with known routes and duration through questionnaires in the three studied cities.
 - [flow_official](https://github.com/Jzjsnow/navi-complexity/blob/main/data/flow_official.csv): the official published ridership of the Beijing subway for May 2019.
-- src_data: basic information used to generate the figures.
-- output: output data used to generate the figures in the paper.
+- [src_data](https://github.com/Jzjsnow/navi-complexity/blob/main/data/src_data): basic information used to generate the figures.
+- [output](https://github.com/Jzjsnow/navi-complexity/blob/main/data/output): output data used to generate the figures in the paper.
 
 ### Smart card data
 Smart card records in Beijing, Shanghai and Shenzhen are shared in this data set.
