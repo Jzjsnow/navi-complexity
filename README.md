@@ -4,58 +4,6 @@ by Zhuojun Jiang, Lei Dong, Lun Wu, and Yu Liu
 ## Abstract
 The complexity of navigation in cities has increased with the expansion of urban areas, creating challenging transportation problems that drive many studies on the navigability of networks. However, due to the lack of individual mobility data, large-scale empirical analysis of the wayfinder's real-world navigation is rare. Here, using 225 million subway trips from three major cities in China, we quantify navigation difficulty from an information perspective. Our results reveal that 1) people conserve a small number of repeatedly used routes, and 2) the navigation information in the sub-networks formed by those routes is much smaller than the theoretical value in the global network, suggesting that the decision cost for actual trips is significantly smaller than the theoretical upper limit found in previous studies. By modeling routing behaviors in growing networks, we show that while the global network can become difficult to navigate, navigability can be improved in sub-networks. We further present a universal linear relationship between the empirical and theoretical search information, which allows the two metrics to predict each other. Our findings demonstrate how large-scale observations can quantify real-world navigation behaviors and aid in evaluating transportation planning.
 
-## Code
-
-### Overview
-
-- **data_prepoccessing.sql** is used to pre-process smart card data.
-
-- **route_matching.py** is used to match paths from the OD records.
-
-- **ESI_from_matching.py** is used to calculate the empirical search information from the matched paths. 
-
-- **ESI_from_ksp.py** is used to calculate the empirical search information from the k shortest paths.
-
-- **TSI.py** reproduces the amount of theoretical global search information according to [Gallotti et al, 2016](https://www.science.org/doi/10.1126/sciadv.1500445).
-
-- **funcs.py** includes the basic functions for the calculations in networks.
-
-- **iofiles.py** includes the I/O functions for saving and loading files.
-
-- **gen_figures.ipynb** reproduces figures in the paper.
-
-### Route matching
-
-To generate the route matching results using the provided scripts, run in the terminal:
-```linux
-$ python route_matching.py 
-```
-
-### Calculate the empirical search information (ESI) 
-
-To generate the route matching results using the provided scripts, run in the terminal:
-```linux
-$ python ESI_from_matching.py
-```
-The output will be in `output/ESI`.
-
-#### From the k shortest paths
-
-To generate the route matching results using the provided scripts, run in the terminal:
-```linux
-$ python ESI_from_ksp.py
-```
-The output will be in `output/ESI`. 
-
-### Calculate the theoretical search information (TSI) 
-Reproduce the amount of theoretical global search information according to [Gallotti et al, 2016](https://www.science.org/doi/10.1126/sciadv.1500445).
-
-To generate the route matching results using the provided scripts, run in the terminal:
-```linux
-$ python TSI.py
-```
-The output will be in `output/TSI`. 
-
 
 ## Data
 
@@ -85,40 +33,6 @@ Data to replicate the results of the paper.
 	* lines_[bj/sh/sz].csv: list of subway lines.
 	* stations_[bj/sh/sz].csv: list of subway stations.
 	* Eudistance_[bj/sh/sz].csv: Euclidean distance between each station pair.
-
-
-<a name="lines"></a>
-- **lines\_[bj/sh/sz].csv**: list of subway lines.
-
-|**Column**|**Definition**|**Data type**|
-| :- | :- | :-: |
-|nid|identication of the subway line|int|
-|name|name of the subway line|string|
-|full\_names|list of full names of the line that distinguishes the direction (marked by the starting and terminal station)|string[]|
-
-&emsp;
-<a name="stations"></a>
-- **stations\_[bj/sh/sz].csv**: list of subway stations.
-
-|**Column**|**Definition**|**Data type**|
-| :- | :- | :-: |
-|sid|identication of the subway station|int|
-|name|name of the subway station|string|
-|linesid|list of ids of subway lines where the station is located|int[]|
-|lines|list of names of subway lines where the station is located|string[]|
-|lat|latitude of the station|double|
-|lng|longitude of the station|double|
-
-&emsp;
-<a name="Eudist"></a>
-- **Eudistance\_[bj/sh/sz].csv**: Euclidean distance between each station pair. The distance is the geodesic distance calculated based on the latitude and longitude of the two stations
-
-|**Column**|**Definition**|**Data type**|
-| :- | :- | :-: |
-|id|row index|int|
-|sid1|starting station id|int|
-|sid2|terminal station id|int|
-|Eudistance|Euclidean distance between stations sid1 and sid2 (in meters)|double|
 
 - [networks](https://github.com/Jzjsnow/navi-complexity/blob/main/data/networks): subway networks of three cities from 2000 to 2020.
 	* Beijing (bj): 15 snapshots.
@@ -225,6 +139,59 @@ Import the subway network with
 |2019/5/31|Ridership on 2019/5/31 (in millions)|double|
 
 - [data_figures](https://github.com/Jzjsnow/navi-complexity/blob/main/data/output): data used to generate the figures in the paper.
+
+
+## Code
+
+### Overview
+
+- **data_prepoccessing.sql** is used to pre-process smart card data.
+
+- **route_matching.py** is used to match paths from the OD records.
+
+- **ESI_from_matching.py** is used to calculate the empirical search information from the matched paths. 
+
+- **ESI_from_ksp.py** is used to calculate the empirical search information from the k shortest paths.
+
+- **TSI.py** reproduces the amount of theoretical global search information according to [Gallotti et al, 2016](https://www.science.org/doi/10.1126/sciadv.1500445).
+
+- **funcs.py** includes the basic functions for the calculations in networks.
+
+- **iofiles.py** includes the I/O functions for saving and loading files.
+
+- **gen_figures.ipynb** reproduces figures in the paper.
+
+### Route matching
+
+To generate the route matching results using the provided scripts, run in the terminal:
+```linux
+$ python route_matching.py 
+```
+
+### Calculate the empirical search information (ESI) 
+
+To generate the route matching results using the provided scripts, run in the terminal:
+```linux
+$ python ESI_from_matching.py
+```
+The output will be in `output/ESI`.
+
+#### From the k shortest paths
+
+To generate the route matching results using the provided scripts, run in the terminal:
+```linux
+$ python ESI_from_ksp.py
+```
+The output will be in `output/ESI`. 
+
+### Calculate the theoretical search information (TSI) 
+Reproduce the amount of theoretical global search information according to [Gallotti et al, 2016](https://www.science.org/doi/10.1126/sciadv.1500445).
+
+To generate the route matching results using the provided scripts, run in the terminal:
+```linux
+$ python TSI.py
+```
+The output will be in `output/TSI`. 
 
 
 
