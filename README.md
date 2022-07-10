@@ -302,9 +302,9 @@ View the line-level TSI between each line pair with C=2 transfers
 Data to replicate the results of the paper.
 ### Overview
 - [smart_card_data](https://github.com/Jzjsnow/navi-complexity/blob/main/data/smart_card_data): Smart card records in Beijing, Shanghai and Shenzhen.
-	* bj_2019.csv: Beijing subway in May 2019.
-	* sh_2015.csv: Shanghai subway in April 2015.
-	* sz_2017.csv: Shenzhen subway from October 2017.
+	* [bj_2019.csv](https://github.com/Jzjsnow/navi-complexity/blob/main/data/smart_card_data/bj_2019.txt): Beijing subway in May 2019.
+	* [sh_2015.csv](https://github.com/Jzjsnow/navi-complexity/blob/main/data/smart_card_data/sh_2015.txt): Shanghai subway in April 2015.
+	* [sz_2017.csv](https://github.com/Jzjsnow/navi-complexity/blob/main/data/smart_card_data/sz_2017.txt): Shenzhen subway from October 2017.
 - [subway_info](https://github.com/Jzjsnow/navi-complexity/blob/main/data/subway_info): attributes of subway lines and stations in Beijing/Shanghai/Shenzhen (by 2020).
 	* lines_[bj/sh/sz].csv: list of subway lines.
 	* stations_[bj/sh/sz].csv: list of subway stations.
