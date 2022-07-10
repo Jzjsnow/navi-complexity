@@ -92,7 +92,9 @@ View the match paths between the station pair sid1-sid2 (stations 1-15 for examp
 ```
 
 ### Calculate the empirical search information (ESI) 
+
 #### From the matched paths
+
 **Data requirements**
 - lines_[bj/sh/sz].csv: subway line list
 - PrimalGraph_[bj/sh/sz]\_yyyy.gml: subway networks
@@ -101,11 +103,13 @@ View the match paths between the station pair sid1-sid2 (stations 1-15 for examp
 - matrix_matched_path_[suffix].pkl: matched paths
 	
 **Code requirements**
+
 - ESI_from_matching.py
 - funcs.py
 - iofiles.py
 
 **Output**
+
 |**Variable**|**Definition**|**Data type**|
 | :-: | :-: | :-: |
 |df_matched_paths|search information of all matched paths|dataframe|
@@ -319,6 +323,7 @@ Smart card records in Beijing, Shanghai and Shenzhen are shared in this data set
 The dataset provides the number of trips(records) at each travel time between each pair of stations ([Data prepoccessing](https://github.com/Jzjsnow/navi-complexity/blob/main/code/data_prepoccessing.sql)).
 
 **Data-specific Information**
+
 |**Column**|**Definition**|**Data type**|
 | :-: | :-: | :-: |
 |f\_line|identication of the starting subway line|int|
@@ -519,6 +524,7 @@ MultiEdgeDataView([(1, 9, {'sid': 18, 'crossing': 'MILITARY MUSEUM'}), (1, 3, {'
 ### Official ridership data
 
 The official published ridership of the Beijing subway for May 2019. The numbers are obtained from [Beijing Subway Company’s official Weibo](https://weibo.com/bjsubway).
+
 **Data-specific Information**
 
 |**Column**|**Definition**|**Data type**|
