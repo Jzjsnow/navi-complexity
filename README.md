@@ -13,18 +13,18 @@ Data to replicate the results of the paper.
 ### Smart card data
 
 Smart card records in Beijing, Shanghai and Shenzhen. The datasets provide OD at the station level grouped by travel time (see [data prepoccessing](https://github.com/Jzjsnow/navi-complexity/blob/main/code/data_prepoccessing.sql) for details):
-- bj_2019.csv: Beijing subway in May 2019. [[Download]](https://drive.google.com/file/d/1IQwbTV3HCTYjAvU-CjDDn2YP4eS1An3l/view?usp=sharing)
-- sh_2015.csv: Shanghai subway in April 2015. [[Download]](https://drive.google.com/file/d/1kdfKzGT5vRyWn8abCJJoX4FSdWjBLRNu/view?usp=sharing)
-- sz_2017.csv: Shenzhen subway in October 2017. [[Download]](https://drive.google.com/file/d/1fp0c98tR8AnXSueauymgFKIimzOPe1LF/view?usp=sharing)
+- bj_2019.csv: Beijing subway in May 2019. [[Download]](https://drive.google.com/file/d/1bvmvDsBAu70z3hQmaPV03DwKE7N-YZuT/view?usp=sharing)
+- sh_2015.csv: Shanghai subway in April 2015. [[Download]](https://drive.google.com/file/d/1paTKWMMhFTNv4ech9u4IjCknbBKIWsTp/view?usp=sharing)
+- sz_2017.csv: Shenzhen subway in October 2017. [[Download]](https://drive.google.com/file/d/118K2ny2So78NbKgWLAuZ-wCoQBBG7-rZ/view?usp=sharing)
 
 |**Column**|**Definition**|**Data type**|
 | :- | :- | :-: |
-|f\_line|identication of the starting subway line|int|
-|sid1|identication of the starting subway station|int|
-|fst\_name|name of the starting subway station|string|
-|t\_line|identication of the terminal subway line|int|
-|sid2|identication of the terminal subway station|int|
-|tst\_name|name of the terminal subway station|string|
+|lineid_o|identication of the starting subway line|int|
+|stationid_o|identication of the starting subway station|int|
+|stationname_o|name of the starting subway station|str|
+|lineid_d|identication of the terminal subway line|int|
+|stationid_d|identication of the terminal subway station|int|
+|stationname_d|name of the terminal subway station|str|
 |d\_time|interval between the entry and exit timestamps (in seconds)|int|
 |count|number of trips with a *d_time* travel time between this station pair|int|
 
@@ -34,7 +34,7 @@ Smart card records in Beijing, Shanghai and Shenzhen. The datasets provide OD at
 Attributes of subway lines and stations in Beijing/Shanghai/Shenzhen (by 2020):
 - lines_[bj/sh/sz].csv: list of subway lines.
 - stations_[bj/sh/sz].csv: list of subway stations.
-- Eudistance_[bj/sh/sz].csv: Euclidean distance between each station pair. 
+- Eudist_[bj/sh/sz].csv: Euclidean distance between each station pair. 
 
 
 ### [Networks](https://github.com/Jzjsnow/navi-complexity/blob/main/data/networks)
@@ -48,13 +48,13 @@ Subway/information networks of three cities from 2000 to 2020:
 |**Node attribute**|**Definition**|**Data type**|
 | :- | :- | :-: |
 |id|serial number of the node in the network (starting from 0)|int|
-|label|each node is labelled as 'nid-sid', where [nid](#lines) represents the ID of the line on which the station is located and [sid](#stations) represents the station ID |string|
+|label|each node is labelled as 'lineid-stationid'|str|
 			
 |**Edge attribute**|**Definition**|**Data type**|
 | :- | :- | :-: |
 |source|the serial number of the starting node|int|
 |target|the serial number of the terminal node|int|
-|key/nid|[line ID](#lines)|int|
+|key/nid|identication of the subway line|int|
 |duration|the in-vehicle time of the section|double|
 |distance|the Euclidean distance along the subway line between the connected stations|double|
 
@@ -66,15 +66,15 @@ Subway/information networks of three cities from 2000 to 2020:
 |**Node attribute**|**Definition**|**Data type**|
 | :- | :- | :-: |
 |id|serial number of the node in the network (starting from 0)|int|
-|label|each node is labelled by 'nid', where [nid](#lines) represents the line ID|string|
+|label|each node is labelled by 'lineid', where lineid represents the line ID|str|
 |name|name of the line|int|
 		
 |**Edge attribute**|**Definition**|**Data type**|
 | :- | :- | :-: |
 |source|the serial number of the starting node|int|
 |target|the serial number of the terminal node|int|
-|key/sid|[station ID](#stations) |int|
-|crossing|name of the transfer station|string|
+|key/sid|identication of the subway station|int|
+|crossing|name of the transfer station|str|
 
 **Usage (Python 3.7)**
 
@@ -95,28 +95,28 @@ Import the subway network with
 |**Column**|**Definition**|**Data type**|
 | :- | :- | :-: |
 |id|questionnaire id|int|
-|city|abbreviation of the city name|string|
-|line_o|name of the starting subway line|string|
-|station_o|name of the starting subway station|string|
-|line_d|name of the terminal subway line|string|
-|station_d|name of the terminal subway station|string|
-|line1|name of the 1st subway line taken in this trip|string|
-|line2|name of the 2nd subway line taken in this trip (blank if none)|string|
-|line3|name of the 3rd subway line taken in this trip (blank if none)|string|
-|line4|name of the 4th subway line taken in this trip (blank if none)|string|
-|line5|name of the 5th subway line taken in this trip (blank if none)|string|
-|line6|name of the 6th subway line taken in this trip (blank if none)|string|
-|transfer1|name of the 1st transfer station taken in this trip (blank if none)|string|
-|transfer2|name of the 2nd transfer station taken in this trip (blank if none)|string|
-|transfer3|name of the 3rd transfer station taken in this trip (blank if none)|string|
-|transfer4|name of the 4th transfer station taken in this trip (blank if none)|string|
-|transfer5|name of the 5th transfer station taken in this trip (blank if none)|string|
-|HH1|Hour of the entry timestamp|int|
-|MM1|Minute of the entry timestamp|int|
-|SS1|Second of the entry timestamp|int|
-|HH2|Hour of the exit timestamp|int|
-|MM2|Minute of the exit timestamp|int|
-|SS2|Second of the exit timestamp|int|
+|city|abbreviation of the city name|str|
+|line_o|name of the starting subway line|str|
+|station_o|name of the starting subway station|str|
+|line_d|name of the terminal subway line|str|
+|station_d|name of the terminal subway station|str|
+|line1|name of the 1st subway line taken in this trip|str|
+|line2|name of the 2nd subway line taken in this trip (blank if none)|str|
+|line3|name of the 3rd subway line taken in this trip (blank if none)|str|
+|line4|name of the 4th subway line taken in this trip (blank if none)|str|
+|line5|name of the 5th subway line taken in this trip (blank if none)|str|
+|line6|name of the 6th subway line taken in this trip (blank if none)|str|
+|transfer1|name of the 1st transfer station taken in this trip (blank if none)|str|
+|transfer2|name of the 2nd transfer station taken in this trip (blank if none)|str|
+|transfer3|name of the 3rd transfer station taken in this trip (blank if none)|str|
+|transfer4|name of the 4th transfer station taken in this trip (blank if none)|str|
+|transfer5|name of the 5th transfer station taken in this trip (blank if none)|str|
+|hour_o|Hour of the entry timestamp|int|
+|minute_o|Minute of the entry timestamp|int|
+|second_o|Second of the entry timestamp|int|
+|hour_d|Hour of the exit timestamp|int|
+|minute_d|Minute of the exit timestamp|int|
+|second_d|Second of the exit timestamp|int|
 |d\_time|interval between the entry and exit timestamps (in seconds)|int|
 |nroutes|number of subway lines taken along the trip|int|
 |choice|the way passengers choose this route(1: by intuitive/habit/experience, 2: selected from multiple routes, 3: directly select the first route recommended by the navigatison software, 4: others)|int|
@@ -129,10 +129,10 @@ The official published ridership of the Beijing subway for May 2019. The numbers
 
 |**Column**|**Definition**|**Data type**|
 | :- | :- | :-: |
-|line_name|name of the subway line|string|
+|line_name|name of the subway line|str|
 |2019/5/1|Ridership on 2019/5/1 (in millions)|double|
 |2019/5/2|Ridership on 2019/5/2 (in millions)|double|
-|...|...|int|
+|...|...|double|
 |2019/5/31|Ridership on 2019/5/31 (in millions)|double|
 
 ### [Data for figures](https://github.com/Jzjsnow/navi-complexity/blob/main/data/output)
@@ -167,27 +167,27 @@ To generate the route matching results using the provided scripts, run in the te
 ```linux
 $ python route_matching.py 
 ```
+The output will be in `output/`.
 
 ### Calculate the empirical search information (ESI) 
 
-To generate the route matching results using the provided scripts, run in the terminal:
+To generate the ESI results based on the matched path from the OD records, run in the terminal:
 ```linux
 $ python ESI_from_matching.py
 ```
 The output will be in `output/ESI`.
 
-#### From the k shortest paths
+When no smart card data (matched paths) are available from 2000 to 2020, the ESI of the subway networks is calculated using the k shortest paths for each year (Beijing: k=13, Shanghai: k=12, Shenzhen k=6, see paper for detail)
 
-To generate the route matching results using the provided scripts, run in the terminal:
+To generate the ESI results based on the k shortest paths, run in the terminal:
 ```linux
 $ python ESI_from_ksp.py
 ```
-The output will be in `output/ESI`. 
 
 ### Calculate the theoretical search information (TSI) 
 Reproduce the amount of theoretical global search information according to [Gallotti et al, 2016](https://www.science.org/doi/10.1126/sciadv.1500445).
 
-To generate the route matching results using the provided scripts, run in the terminal:
+To generate the TSI results using the provided scripts, run in the terminal:
 ```linux
 $ python TSI.py
 ```
