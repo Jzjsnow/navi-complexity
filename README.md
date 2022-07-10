@@ -21,6 +21,7 @@ Codes to replicate the results of the paper.
 - **iofiles.py** includes the I/O functions for saving and loading the files.
 
 - **gen_figures.ipynb** reproduces the figures in the paper.
+
 ### Code description
 See [README_for_code.md](https://github.com/Jzjsnow/navi-complexity/blob/main/README_for_code.md) for detail. 
 
@@ -42,11 +43,12 @@ Data to replicate the results of the paper.
 	* Shenzhen (sz): 8 snapshots.
 - surveydata: 272 subway trips with known routes and duration through questionnaires in the three studied cities.
 - flow_official: the official ridership of the Beijing subway for May 2019.
-- src_data: basic information used to initialize the code.
+- src_data: basic information used to generate the figures.
 - output: output data used to generate the figures in the paper.
 
 ### Data description
 See [README_for_data.md](https://github.com/Jzjsnow/navi-complexity/blob/main/README_for_data.md) for detail. 
+
 
 
 
