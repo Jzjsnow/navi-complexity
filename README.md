@@ -52,7 +52,6 @@ The codes are based on Python 3.7.7. They have been tested on Ubuntu 18.04.3 LTS
 ### Route matching
 Calculate the matched paths from the OD records.
 
-&emsp;
 **Data requirements**
 
 - stations_[bj/sh/sz].csv: station list
@@ -61,20 +60,17 @@ Calculate the matched paths from the OD records.
 - Eudistance_[bj/sh/sz].csv: Euclidean distances between stations
 - smart_card_data/[bj/sh/sz]\_yyyy.csv: smart card data
 
-&emsp;
 **Code requirements**
 - route_matching.py
 - funcs.py
 - iofiles.py
 
-&emsp;
 **Output**
 |**Variable**|**Definition**|**Data type**|
 | :-: | :-: | :-: |
 |matrix_matched_path|matched paths between each station pair|matrix|
 
 
-&emsp;
 **Usage**
 
 To generate the route matching results (data/output/ESI/matrix_matched_path_[suffix]) using the provided scripts, run in the terminal:
@@ -99,7 +95,6 @@ View the match paths between the station pair sid1-sid2 (stations 1-15 for examp
 
 #### From the matched paths
 
-&emsp;
 **Data requirements**
 - lines_[bj/sh/sz].csv: subway line list
 - PrimalGraph_[bj/sh/sz]\_yyyy.gml: subway networks
@@ -107,14 +102,12 @@ View the match paths between the station pair sid1-sid2 (stations 1-15 for examp
 - Eudistance_[bj/sh/sz].csv: Euclidean distances between stations
 - matrix_matched_path_[suffix].pkl: matched paths
 	
-&emsp;
 **Code requirements**
 
 - ESI_from_matching.py
 - funcs.py
 - iofiles.py
 
-&emsp;
 **Output**
 
 |**Variable**|**Definition**|**Data type**|
@@ -127,7 +120,6 @@ View the match paths between the station pair sid1-sid2 (stations 1-15 for examp
 |matrix_S_sub_nid_C3|line-level ESI between each line pair with C=3 transfers|matrix|
 
 
-&emsp;
 **Usage**
 
 To generate the route matching results using the provided scripts, run in the terminal:
@@ -160,7 +152,6 @@ View the output of the line-level ESI
 
 #### From the k shortest paths
 
-&emsp;
 **Data requirements**
 
 - stations_[bj/sh/sz].csv: station list
@@ -169,14 +160,12 @@ View the output of the line-level ESI
 - DualGraph_[bj/sh/sz]\_yyyy.gml: information networks
 - Eudistance_[bj/sh/sz].csv: Euclidean distances between stations
 
-&emsp;
 	
 **Code requirements**
 - ESI_from_ksp.py
 - funcs.py
 - iofiles.py
 
-&emsp;
 **Output**
 
 |**Variable**|**Definition**|**Data type**|
@@ -196,7 +185,6 @@ View the output of the line-level ESI
 |matrix_Ktot_st_C3_sub|average number of connections in the sub-networks of OD stations with C=3 transfer between the line pair|matrix|
 
 
-&emsp;
 **Usage**
 
 To generate the route matching results using the provided scripts, run in the terminal:
@@ -241,7 +229,6 @@ View the line-level ESI between each line pair with C=2 transfers
 ### Calculate the theoretical search information (TSI) 
 Reproduce the amount of theoretical global search information according to [Gallotti et al, 2016](https://www.science.org/doi/10.1126/sciadv.1500445).
 
-&emsp;
 **Data requirements**
 
 - stations_[bj/sh/sz].csv: station list	
@@ -249,13 +236,11 @@ Reproduce the amount of theoretical global search information according to [Gall
 - PrimalGraph_[bj/sh/sz]\_yyyy.gml: subway networks
 - DualGraph_[bj/sh/sz]\_yyyy.gml: information networks
 	
-&emsp;
 **Code requirements**
 - TSI.py
 - funcs.py
 - iofiles.py
 
-&emsp;
 **Output**
 
 |**Variable**|**Definition**|**Data type**|
@@ -270,7 +255,6 @@ Reproduce the amount of theoretical global search information according to [Gall
 |matrix_S_nid_C3|line-level TSI between each line pair with C=3 transfers|matrix|
 
 
-&emsp;
 **Usage**
 
 To generate the route matching results using the provided scripts, run in the terminal:
@@ -338,7 +322,6 @@ Data to replicate the results of the paper.
 Smart card records in Beijing, Shanghai and Shenzhen are shared in this data set.
 The dataset provides the number of trips(records) at each travel time between each pair of stations ([Data prepoccessing](https://github.com/Jzjsnow/navi-complexity/blob/main/code/data_prepoccessing.sql)).
 
-&emsp;
 **Data-specific Information**
 
 |**Column**|**Definition**|**Data type**|
@@ -353,7 +336,6 @@ The dataset provides the number of trips(records) at each travel time between ea
 |count|number of trips with a *d_time* travel time between this station pair|int|
 
 
-&emsp;
 **Usage**
 
 View data in the terminal:
@@ -366,7 +348,6 @@ $ head -5 bj_2019.csv
 
 The attributes of subway lines/stations in Beijing/Shanghai/Shenzhen (by 2020).
 
-&emsp;
 **Data-specific Information**
 
 <a name="lines"></a>
@@ -413,7 +394,6 @@ Subway networks of of Beijing/Shanghai/Shenzhen from 2000 to 2020.
 - 8 snapshots in Shenzhen (sz): 2004, 2007, 2009, 2010, 2011, 2016, 2019, 2020.
 
 
-&emsp;
 **Data-specific Information**
 
 Each subway network (primal graph) and its information network (dual graph) are separately constructed by [networkx](https://networkx.org/) graph models and saved in [GML](https://web.archive.org/web/20190207140002/http://www.fim.uni-passau.de/index.php?id=17297&L=1) format.
@@ -460,7 +440,6 @@ Each subway network (primal graph) and its information network (dual graph) are 
 |key/sid|[station ID](#stations) |int|
 |crossing|name of the transfer station|string|
 
-&emsp;
 
 **Usage (Python 3.7)**
 
@@ -509,7 +488,6 @@ MultiEdgeDataView([(1, 9, {'sid': 18, 'crossing': 'MILITARY MUSEUM'}), (1, 3, {'
 
 272 subway trips with known routes and duration through questionnaires in the three studied cities.
 
-&emsp;
 **Data-specific Information**
 
 |**Column**|**Definition**|**Data type**|
@@ -547,7 +525,6 @@ MultiEdgeDataView([(1, 9, {'sid': 18, 'crossing': 'MILITARY MUSEUM'}), (1, 3, {'
 
 The official published ridership of the Beijing subway for May 2019. The numbers are obtained from [Beijing Subway Company’s official Weibo](https://weibo.com/bjsubway).
 
-&emsp;
 **Data-specific Information**
 
 |**Column**|**Definition**|**Data type**|
