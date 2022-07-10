@@ -212,12 +212,12 @@ MultiEdgeDataView([(1, 9, {'sid': 18, 'crossing': 'MILITARY MUSEUM'}), (1, 3, {'
 |SS2|Second of the exit timestamp|int|
 |d\_time|interval between the entry and exit timestamps (in seconds)|int|
 |nroutes|number of subway lines taken along the trip|int|
-|choice|the way passengers choose this route(1: by intuitive/habit/experience,2: selected from multiple routes, 3: directly select the first route recommended by the navigation software, 4: others)|int|
+|choice|the way passengers choose this route(1: by intuitive/habit/experience, 2: selected from multiple routes, 3: directly select the first route recommended by the navigatison software, 4: others)|int|
 |age|passenger's age group(1: <18, 2: 18-25, 3: 26-30, 4: 31-40, 5: 41-50, 6: 51-60, 7: >60)|int|
 
 
 ## Official ridership data
-The official ridership of the Beijing subway for May 2019.
+The official ridership of the Beijing subway for May 2019. The ridership numbers are obtained from [Beijing Subway Company’s official Weibo](https://weibo.com/bjsubway).
 ### Data-specific Information
 |**Column**|**Definition**|**Data type**|
 | :-: | :-: | :-: |
