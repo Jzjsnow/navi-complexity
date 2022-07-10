@@ -313,8 +313,8 @@ Data to replicate the results of the paper.
 	* Beijing (bj): 15 snapshots.
 	* Shanghai (sh): 18 snapshots.
 	* Shenzhen (sz): 8 snapshots.
-- surveydata: 272 subway trips with known routes and duration through questionnaires in the three studied cities.
-- flow_official: the official published ridership of the Beijing subway for May 2019.
+- [surveydata](https://github.com/Jzjsnow/navi-complexity/blob/main/data/surveydata.csv): 272 subway trips with known routes and duration through questionnaires in the three studied cities.
+- [flow_official](https://github.com/Jzjsnow/navi-complexity/blob/main/data/flow_official.csv): the official published ridership of the Beijing subway for May 2019.
 - src_data: basic information used to generate the figures.
 - output: output data used to generate the figures in the paper.
 
