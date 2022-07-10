@@ -111,7 +111,7 @@ View the match paths between the station pair sid1-sid2 (stations 1-15 for examp
 **Output**
 
 |**Variable**|**Definition**|**Data type**|
-| :-: | :-: | :-: |
+| :- | :- | :-: |
 |df_matched_paths|search information of all matched paths|dataframe|
 |df_Ss_i_j|station-level ESI for each OD station pair|dataframe|
 |matrix_S_sub_nid|line-level ESI between each line pair|matrix|
@@ -169,7 +169,7 @@ View the output of the line-level ESI
 **Output**
 
 |**Variable**|**Definition**|**Data type**|
-| :-: | :-: | :-: |
+| :- | :- | :-: |
 |matrix_Ss_sub|station-level ESI between each station pair|matrix|
 |matrix_nroutes_sub|number of lines included in the fastest simplest path of each station pair|matrix|
 |matrix_pathlength_sub|travel time of the fastest simplest path of each station pair|matrix|
@@ -244,7 +244,7 @@ Reproduce the amount of theoretical global search information according to [Gall
 **Output**
 
 |**Variable**|**Definition**|**Data type**|
-| :-: | :-: | :-: |
+| :- | :- | :-: |
 |matrix_Ss|station-level TSI between each station pair|matrix|
 |matrix_nroutes|number of lines included in the fastest simplest path of each station pair|matrix|
 |matrix_pathlength|travel time of the fastest simplest path of each station pair|matrix|
@@ -325,7 +325,7 @@ The dataset provides the number of trips(records) at each travel time between ea
 **Data-specific Information**
 
 |**Column**|**Definition**|**Data type**|
-| :-: | :-: | :-: |
+| :- | :- | :-: |
 |f\_line|identication of the starting subway line|int|
 |sid1|identication of the starting subway station|int|
 |fst\_name|name of the starting subway station|string|
@@ -354,7 +354,7 @@ The attributes of subway lines/stations in Beijing/Shanghai/Shenzhen (by 2020).
 - **lines\_[bj/sh/sz].csv**: list of subway lines.
 
 |**Column**|**Definition**|**Data type**|
-| :-: | :-: | :-: |
+| :- | :- | :-: |
 |nid|identication of the subway line|int|
 |name|name of the subway line|string|
 |full\_names|list of full names of the line that distinguishes the direction (marked by the starting and terminal station)|string[]|
@@ -364,7 +364,7 @@ The attributes of subway lines/stations in Beijing/Shanghai/Shenzhen (by 2020).
 - **stations\_[bj/sh/sz].csv**: list of subway stations.
 
 |**Column**|**Definition**|**Data type**|
-| :-: | :-: | :-: |
+| :- | :- | :-: |
 |sid|identication of the subway station|int|
 |name|name of the subway station|string|
 |linesid|list of ids of subway lines where the station is located|int[]|
@@ -377,7 +377,7 @@ The attributes of subway lines/stations in Beijing/Shanghai/Shenzhen (by 2020).
 - **Eudistance\_[bj/sh/sz].csv**: Euclidean distance between each station pair. The distance is the geodesic distance calculated based on the latitude and longitude of the two stations
 
 |**Column**|**Definition**|**Data type**|
-| :-: | :-: | :-: |
+| :- | :- | :-: |
 |id|row index|int|
 |sid1|starting station id|int|
 |sid2|terminal station id|int|
@@ -404,12 +404,12 @@ Each subway network (primal graph) and its information network (dual graph) are 
 	* Edge: each edge represents the subway line connecting adjacent stations.
 	
 |**Node attribute**|**Definition**|**Data type**|
-| :-: | :-: | :-: |
+| :- | :- | :-: |
 |id|serial number of the node in the network (starting from 0)|int|
 |label|each node is labelled as 'nid-sid', where [nid](#lines) represents the ID of the line on which the station is located and [sid](#stations) represents the station ID |string|
 			
 |**Edge attribute**|**Definition**|**Data type**|
-| :-: | :-: | :-: |
+| :- | :- | :-: |
 |source|the serial number of the starting node|int|
 |target|the serial number of the terminal node|int|
 |key/nid|[line ID](#lines)|int|
@@ -427,14 +427,14 @@ Each subway network (primal graph) and its information network (dual graph) are 
 	* Edge: each edge represents the transfer station connecting the two intersecting lines. 
 
 |**Node attribute**|**Definition**|**Data type**|
-| :-: | :-: | :-: |
+| :- | :- | :-: |
 |id|serial number of the node in the network (starting from 0)|int|
 |label|each node is labelled by 'nid', where [nid](#lines) represents the line ID|string|
 |name|name of the line|int|
 
 		
 |**Edge attribute**|**Definition**|**Data type**|
-| :-: | :-: | :-: |
+| :- | :- | :-: |
 |source|the serial number of the starting node|int|
 |target|the serial number of the terminal node|int|
 |key/sid|[station ID](#stations) |int|
@@ -491,7 +491,7 @@ MultiEdgeDataView([(1, 9, {'sid': 18, 'crossing': 'MILITARY MUSEUM'}), (1, 3, {'
 **Data-specific Information**
 
 |**Column**|**Definition**|**Data type**|
-| :-: | :-: | :-: |
+| :- | :- | :-: |
 |id|questionnaire id|int|
 |city|abbreviation of the city name|string|
 |line_o|name of the starting subway line|string|
@@ -528,7 +528,7 @@ The official published ridership of the Beijing subway for May 2019. The numbers
 **Data-specific Information**
 
 |**Column**|**Definition**|**Data type**|
-| :-: | :-: | :-: |
+| :- | :- | :-: |
 |line_name|name of the subway line|string|
 |2019/5/1|Ridership on 2019/5/1 (in millions)|double|
 |2019/5/2|Ridership on 2019/5/2 (in millions)|double|
