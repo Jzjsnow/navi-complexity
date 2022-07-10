@@ -217,7 +217,7 @@ MultiEdgeDataView([(1, 9, {'sid': 18, 'crossing': 'MILITARY MUSEUM'}), (1, 3, {'
 
 
 ## Official ridership data
-The official ridership of the Beijing subway for May 2019. The ridership numbers are obtained from [Beijing Subway Company’s official Weibo](https://weibo.com/bjsubway).
+The official published ridership of the Beijing subway for May 2019. The numbers are obtained from [Beijing Subway Company’s official Weibo](https://weibo.com/bjsubway).
 ### Data-specific Information
 |**Column**|**Definition**|**Data type**|
 | :-: | :-: | :-: |
