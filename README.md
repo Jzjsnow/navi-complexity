@@ -530,10 +530,10 @@ The official published ridership of the Beijing subway for May 2019. The numbers
 |**Column**|**Definition**|**Data type**|
 | :-: | :-: | :-: |
 |line_name|name of the subway line|string|
-|2019/5/1|Ridership on 2019/5/1 (in millions)|int|
-|2019/5/2|Ridership on 2019/5/2 (in millions)|int|
+|2019/5/1|Ridership on 2019/5/1 (in millions)|double|
+|2019/5/2|Ridership on 2019/5/2 (in millions)|double|
 |...|...|int|
-|2019/5/31|Ridership on 2019/5/31 (in millions)|int|
+|2019/5/31|Ridership on 2019/5/31 (in millions)|double|
 
 
 &emsp;
