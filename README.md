@@ -34,7 +34,7 @@ Smart card records in Beijing, Shanghai and Shenzhen. The datasets provide OD at
 Attributes of subway lines and stations in Beijing/Shanghai/Shenzhen (by 2020):
 - lines_[bj/sh/sz].csv: list of subway lines.
 - stations_[bj/sh/sz].csv: list of subway stations.
-- Eudistance_[bj/sh/sz].csv: Euclidean distance between each station pair. The distance is the geodesic distance calculated based on the latitude and longitude of the two stations.
+- Eudistance_[bj/sh/sz].csv: Euclidean distance between each station pair. 
 
 
 ### [Networks](https://github.com/Jzjsnow/navi-complexity/blob/main/data/networks)
@@ -68,7 +68,6 @@ Subway/information networks of three cities from 2000 to 2020:
 |id|serial number of the node in the network (starting from 0)|int|
 |label|each node is labelled by 'nid', where [nid](#lines) represents the line ID|string|
 |name|name of the line|int|
-
 		
 |**Edge attribute**|**Definition**|**Data type**|
 | :- | :- | :-: |
@@ -88,7 +87,6 @@ Import the subway network with
 ```python
 >>> H = nx.read_gml('PrimalGraph_bj_2019.gml')
 ```
-
 	
 ### [Survey data](https://github.com/Jzjsnow/navi-complexity/blob/main/data/surveydata.csv)
 
