@@ -145,10 +145,10 @@ Data used to generate the figures in the paper, which is the output of the [code
 | :- | :- | :-: |
 |seq_stops|sequence of stations along the path|str[]|
 |pathturns|transfer stations along the path|str[]|
-|seq_lines|sequence of lines along the matched path|int[]|
+|seq_lines|sequence of lines along the path|int[]|
 |nroutes|number of lines taken along the path|int|
-|duration|the travel time of the matched path|double|
-|distance|the Euclidean distance along the matched path|double|
+|duration|the travel time of the path|double|
+|distance|the Euclidean distance of the path|double|
 |avg_counts|number of trips on the path|double|
 |total|total number of trips between the OD stations|double|
 	
@@ -161,14 +161,14 @@ dataframe of empirical search information for matched paths
 | :- | :- | :-: |
 |i|start station id|int|
 |j|terminal station id|int|
-|seq_lines|sequence of nodes along the matched path in the information network|int[]|
+|seq_lines|sequence of nodes along the path in the information network|int[]|
 |pathturns|transfer stations along the path|str[]|
 |nroutes|number of subway lines taken along the trip|int|
-|diff_nroutes|difference between the transfer number of this matched path and the minimum transfer number of all the matched paths between the OD stations|int|
-|duration|the travel time of the matched path|double|
+|diff_nroutes|difference between the transfer number of this path and the minimum transfer number of all the matched paths between the OD stations|int|
+|duration|the travel time of the path|double|
 |avg_counts|number of trips on the path|double|
 |Ktot_sub|number of connections in the sub-network of the OD stations|int|
-|S_sub|empirical search information of taking this matched path|double|
+|S_sub|empirical search information of taking the path|double|
 
 &emsp;
 	
