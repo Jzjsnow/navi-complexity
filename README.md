@@ -146,7 +146,7 @@ Data used to generate the figures in the paper, which is the output of the [code
 |seq_stops|sequence of stations along the path|str[]|
 |pathturns|transfer stations along the path|str[]|
 |seq_lines|sequence of lines along the matched path|int[]|
-|nroutes|number of subway lines taken along the path|int|
+|nroutes|number of lines taken along the path|int|
 |duration|the travel time of the matched path|double|
 |distance|the Euclidean distance along the matched path|double|
 |avg_counts|number of trips on the path|double|
@@ -207,7 +207,7 @@ dataframe of empirical search information for station pairs
 	
 **Usage (Python 3.7)**
 
-Import the I/O functions with
+Import the [I/O functions](https://github.com/Jzjsnow/navi-complexity/blob/main/code/iofiles.py) with
 ```python
 >>> from iofiles import *
 ```
