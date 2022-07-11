@@ -17,4 +17,4 @@ copy (
 	where stationid_o <> stationid_d
 	group by lineid_o,stationid_o,stationname_o,lineid_d,stationid_d,stationname_d,d_time
 
-) TO  'navigation_complexity/src_data/bj_2019.csv' with csv header
+) TO  'navigation_complexity/data/bj_2019.csv' with csv header
