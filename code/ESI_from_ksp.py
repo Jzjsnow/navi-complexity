@@ -314,15 +314,10 @@ def get_ESI_snapshot(city_abbr, mat_width, max_line_id, snapshot, kmax, dist_dic
                    matrix_nroutes_sub,
                    matrix_pathlength_sub,
                    matrix_pathdist_sub,
-                   matrix_Ktot_sub,
                    matrix_S_sub_nid,
-                   matrix_Ktot_st_sub,
                    matrix_S_sub_nid_C1,
-                   matrix_Ktot_st_C1_sub,
                    matrix_S_sub_nid_C2,
-                   matrix_Ktot_st_C2_sub,
                    matrix_S_sub_nid_C3,
-                   matrix_Ktot_st_C3_sub,
                    ],
                   'output/ESI/ksp_' + str(kmax) + '_'+city_abbr+'_' + suffix)
     print('save in', 'output/ESI/ksp_' + str(kmax) + '_'+city_abbr+'_' + suffix)
