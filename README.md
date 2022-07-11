@@ -88,7 +88,7 @@ Import the subway network with
 >>> H = nx.read_gml('PrimalGraph_bj_2019.gml')
 ```
 	
-### [Survey data](https://github.com/Jzjsnow/navi-complexity/blob/main/data/surveya_data.csv)
+### [Survey data](https://github.com/Jzjsnow/navi-complexity/blob/main/data/survey_data.csv)
 
 272 subway trips with known routes and duration through questionnaires in the three studied cities.
 
@@ -166,6 +166,8 @@ Import the data for figures with
 ```python
 >>> data = load_variable('data/output/ESI/res_stationlevel_card_bj_2019.pkl')
 ```
+
+***
 
 ## Code
 
