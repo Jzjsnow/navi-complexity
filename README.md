@@ -41,7 +41,7 @@ Attributes of subway lines and stations in Beijing/Shanghai/Shenzhen (by 2020):
 
 Subway/information networks of three cities from 2000 to 2020:
 
-- PrimalGraph\_[bj/sh/sz]\_yyyy.gml: the subway network of Beijing/Shanghai/Shenzhen in the year of 'yyyy'. 
+- PrimalGraph\_[bj/sh/sz]\_[yyyy].gml: the subway network of Beijing/Shanghai/Shenzhen in the year of 'yyyy'. 
     * Node: each node represents a station.
     * Edge: each edge represents the subway line connecting adjacent stations.
 	
@@ -59,7 +59,7 @@ Subway/information networks of three cities from 2000 to 2020:
 |distance|the Euclidean distance along the subway line between the connected stations|double|
 
 
-- DualGraph\_[bj/sh/sz]\_yyyy.gml: the information network of Beijing/Shanghai/Shenzhen in the year of 'yyyy'. 
+- DualGraph\_[bj/sh/sz]\_[yyyy].gml: the information network of Beijing/Shanghai/Shenzhen in the year of 'yyyy'. 
     * Node: each node represents a subway line.
     * Edge: each edge represents the transfer station connecting the two intersecting lines. 
 
@@ -138,25 +138,25 @@ The official published ridership of the Beijing subway for May 2019. The numbers
 ### [Data for figures](https://github.com/Jzjsnow/navi-complexity/blob/main/data/output)
 
 Data used to generate the figures in the paper, which is the output of the [code](#code) for the paper (see [gen_figures](https://github.com/Jzjsnow/navi-complexity/blob/main/code/gen_figures.ipynb) for details).
-- matrix_matched_path_[bj/sh/sz]_yyyy.pkl: the results of matched paths from [Route matching](#route-matching). The file contains:
-	* a matrix of dataframes where the dataframe of matched paths from station i to station j is stored at (i,j). 
+- matrix_matched_path_[bj/sh/sz]\_[yyyy].pkl: the results of matched paths from [Route matching](#route-matching). The file contains:
+	* a matrix of dataframes where the dataframe of matched paths from station i to station j is stored at (i,j)
 
 |**Column**|**Definition**|**Data type**|
 | :- | :- | :-: |
 |seq_stops|sequence of stations along the path|str[]|
 |pathturns|transfer stations along the path|str[]|
 |seq_lines|sequence of lines along the matched path|int[]|
-|nroutes|number of subway lines taken along the trip|int|
+|nroutes|number of subway lines taken along the path|int|
 |duration|the travel time of the matched path|double|
 |distance|the Euclidean distance along the matched path|double|
 |avg_counts|number of trips on the path|double|
 |total|total number of trips between the OD stations|double|
 	
-- res_stationlevel_card_[bj/sh/sz]_yyyy.pkl: the results of the empirical search information calculated based on the matched paths from [Calculate the empirical search information (ESI)](#calculate-the-empirical-search-information-esi). The file contains:
+- ESI/res_stationlevel_card_[bj/sh/sz]\_[yyyy].pkl: the results of the station-level empirical search information calculated based on the matched paths from [Calculate the empirical search information (ESI)](#calculate-the-empirical-search-information-esi). The file contains:
 	* a dataframe of empirical search information values for all matched path in the information network
-	* a dataframe of the empirical search information between station pairs. 
+	* a dataframe of the empirical search information between station pairs
 
-empirical search information values for matched paths
+dataframe of empirical search information for matched paths
 |**Column**|**Definition**|**Data type**|
 | :- | :- | :-: |
 |i|start station id|int|
@@ -164,7 +164,7 @@ empirical search information values for matched paths
 |seq_lines|sequence of nodes along the matched path in the information network|int[]|
 |pathturns|transfer stations along the path|str[]|
 |nroutes|number of subway lines taken along the trip|int|
-|diff_nroutes|difference between the transfer number of this matched path and the minimum transfer number of all the matched paths between the OD station|int|
+|diff_nroutes|difference between the transfer number of this matched path and the minimum transfer number of all the matched paths between the OD stations|int|
 |duration|the travel time of the matched path|double|
 |avg_counts|number of trips on the path|double|
 |Ktot_sub|number of connections in the sub-network of the OD stations|int|
@@ -172,22 +172,39 @@ empirical search information values for matched paths
 
 &emsp;
 	
-empirical search information values for station pairs
+dataframe of empirical search information for station pairs
 |**Column**|**Definition**|**Data type**|
 | :- | :- | :-: |
 |i|start station id|int|
 |j|terminal station id|int|
-|k_paths|number of matched paths between the OD station|int|
-|nroutes|number of subway lines taken between the OD station|double|
-|min_nroutes|minimum number of subway lines taken on the matched paths between the OD station|int|
-|duration|the travel time between the OD station|double|
+|nroutes|number of subway lines taken between the OD stations|double|
+|min_nroutes|minimum number of subway lines taken on the matched paths between the OD stations|int|
+|duration|the travel time between the OD stations|double|
 |Ktot_sub|number of connections in the sub-network of the OD stations|int|
-|avg_counts|number of trips between the OD station|double|
-|S_sub|empirical search information between the OD station|int|
+|avg_counts|number of trips between the OD stations|double|
+|k_paths|number of matched paths between the OD stations|int|
+|S_sub|empirical search information between the OD stations|double|
 	
+- ESI/res_linelevel_card_[bj/sh/sz]\_[yyyy].pkl: the results of the line-level empirical search information calculated based on the matched paths from [Calculate the empirical search information (ESI)](#calculate-the-empirical-search-information-esi). The file contains:
+	* matrices of line-level empirical search information between line pairs with all/1/2/3 transfers on the travel paths
 	
 
+- ESI/ksp_[k]\_[bj/sh/sz]\_[yyyy].pkl: the results of the empirical search information calculated based on the k shortest paths from [Calculate the empirical search information (ESI)](#calculate-the-empirical-search-information-esi). The file contains:
+	* a matrix of station-level empirical search information values
+	* a matrix of number of subway lines taken between station pairs
+	* a matrix of travel time between station pairs
+	* a matrix of travel distance between station pairs
+	* matrices of line-level empirical search information between line pairs with all/1/2/3 transfers.
 
+
+- TSI/[bj/sh/sz]\_[yyyy].pkl: the results of the theoretical search information calculated  from [Calculate the theoretical search information (TSI)](#calculate-the-theoretical-search-information-tsi). The file contains:
+	* a matrix of station-level theoretical search information values
+	* a matrix of number of subway lines on the fastest simplest path between station pairs
+	* a matrix of travel time of the fastest simplest path between station pairs
+	* a matrix of travel distance of the fastest simplest path between station pairs
+	* matrices of line-level theoretical search information between line pairs with all/1/2/3 transfers on the fastest simplest paths
+
+	
 **Usage (Python 3.7)**
 
 Import the I/O functions with
@@ -198,6 +215,7 @@ Import the I/O functions with
 Import the data for figures with
 ```python
 >>> data = load_variable('data/output/ESI/res_stationlevel_card_bj_2019.pkl')
+>>> data[0] # view the dataframe
 ```
 
 ***
