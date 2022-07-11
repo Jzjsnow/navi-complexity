@@ -88,7 +88,7 @@ Import the subway network with
 >>> H = nx.read_gml('PrimalGraph_bj_2019.gml')
 ```
 	
-### [Survey data](https://github.com/Jzjsnow/navi-complexity/blob/main/data/surveydata.csv)
+### [Survey data](https://github.com/Jzjsnow/navi-complexity/blob/main/data/surveya_data.csv)
 
 272 subway trips with known routes and duration through questionnaires in the three studied cities.
 
@@ -129,7 +129,7 @@ The official published ridership of the Beijing subway for May 2019. The numbers
 
 |**Column**|**Definition**|**Data type**|
 | :- | :- | :-: |
-|line_name|name of the subway line|str|
+|linename|name of the subway line|str|
 |2019/5/1|Ridership on 2019/5/1 (in millions)|double|
 |2019/5/2|Ridership on 2019/5/2 (in millions)|double|
 |...|...|double|
@@ -177,8 +177,7 @@ $ python ESI_from_matching.py
 ```
 The output will be in `output/ESI`.
 
-When no smart card data (matched paths) are available from 2000 to 2020, the ESI of the subway networks is calculated using the k shortest paths for each year (Beijing: k=13, Shanghai: k=12, Shenzhen k=6, see paper for detail)
-
+When no smart card data (matched paths) are available from 2000 to 2020, the ESI of the subway networks is calculated using the k shortest paths for each year (Beijing: k=13, Shanghai: k=12, Shenzhen k=6, see paper for detail).
 To generate the ESI results based on the k shortest paths, run in the terminal:
 ```linux
 $ python ESI_from_ksp.py
