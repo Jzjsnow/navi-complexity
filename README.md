@@ -137,9 +137,35 @@ The official published ridership of the Beijing subway for May 2019. The numbers
 
 ### [Data for figures](https://github.com/Jzjsnow/navi-complexity/blob/main/data/output)
 
-Data used to generate the figures in the paper.
+Data used to generate the figures in the paper, which is the output of the [code](#code) for the paper (see [gen_figures](https://github.com/Jzjsnow/navi-complexity/blob/main/code/gen_figures.ipynb) for details).
+- matrix_matched_path_[bj/sh/sz]_yyyy.pkl: contains a matrix of dataframes where the dataframe of matched paths from station i to station j is stored at (i,j). The results of matched paths are derived from [route matching](#route_matching).
 
-***
+|**Column**|**Definition**|**Data type**|
+| :- | :- | :-: |
+|seq_stops|sequence of stations along the path|str[]|
+|pathturns|sequence of transfer stations along the path|str[]|
+|seq_lines|sequence of lines along the matched path|int[]|
+|nroutes|number of subway lines taken along the trip|int|
+|duration|the travel time of the matched path|double|
+|distance|the Euclidean distance along the matched path|double|
+|avg_counts|number of trips on the path|double|
+|total|total number of trips between the OD stations|double|
+	
+- res_stationlevel_card_[bj/sh/sz]_yyyy.pkl: contains a dataframe of empirical search information values for all matched path in the information network, and a dataframe of the empirical search information between station pairs. The results of the empirical search information calculated based on the matched paths are from [Calculate the empirical search information (ESI)](#calculate_the_empirical_search_information_ESI).
+
+
+
+**Usage (Python 3.7)**
+
+Import the I/O functions with
+```python
+>>> from iofiles import *
+```
+
+Import the data for figures with
+```python
+>>> data = load_variable('data/output/ESI/res_stationlevel_card_bj_2019.pkl')
+```
 
 ## Code
 
