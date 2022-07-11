@@ -139,7 +139,7 @@ The official published ridership of the Beijing subway for May 2019. The numbers
 
 Data used to generate the figures in the paper, which is the output of the [code](#code) for the paper (see [gen_figures](https://github.com/Jzjsnow/navi-complexity/blob/main/code/gen_figures.ipynb) for details).
 - matrix_matched_path_[bj/sh/sz]\_[yyyy].pkl: the results of matched paths from [Route matching](#route-matching). The file contains:
-	* a matrix of dataframes where the dataframe of matched paths from station i to station j is stored at (i,j)
+	* A matrix of dataframes where the dataframe of matched paths from station i to station j is stored at (i,j).
 
 |**Column**|**Definition**|**Data type**|
 | :- | :- | :-: |
@@ -153,8 +153,8 @@ Data used to generate the figures in the paper, which is the output of the [code
 |total|total number of trips between the OD stations|double|
 	
 - ESI/res_stationlevel_card_[bj/sh/sz]\_[yyyy].pkl: the results of the station-level empirical search information calculated based on the matched paths from [Calculate the empirical search information (ESI)](#calculate-the-empirical-search-information-esi). The file contains:
-	* a dataframe of empirical search information values for all matched path in the information network
-	* a dataframe of the empirical search information between station pairs
+	* A dataframe of empirical search information values for all matched path in the information network
+	* A dataframe of the empirical search information between station pairs
 
 dataframe of empirical search information for matched paths
 |**Column**|**Definition**|**Data type**|
@@ -186,23 +186,23 @@ dataframe of empirical search information for station pairs
 |S_sub|empirical search information between the OD stations|double|
 	
 - ESI/res_linelevel_card_[bj/sh/sz]\_[yyyy].pkl: the results of the line-level empirical search information calculated based on the matched paths from [Calculate the empirical search information (ESI)](#calculate-the-empirical-search-information-esi). The file contains:
-	* matrices of line-level empirical search information between line pairs with all/1/2/3 transfers on the travel paths
+	* Matrices of line-level empirical search information between line pairs with all/1/2/3 transfers on the travel paths.
 	
 
 - ESI/ksp_[k]\_[bj/sh/sz]\_[yyyy].pkl: the results of the empirical search information calculated based on the k shortest paths from [Calculate the empirical search information (ESI)](#calculate-the-empirical-search-information-esi). The file contains:
-	* a matrix of station-level empirical search information values
-	* a matrix of number of subway lines taken between station pairs
-	* a matrix of travel time between station pairs
-	* a matrix of travel distance between station pairs
-	* matrices of line-level empirical search information between line pairs with all/1/2/3 transfers.
+	* A matrix of station-level empirical search information values.
+	* A matrix of number of subway lines taken between station pairs.
+	* A matrix of travel time between station pairs.
+	* A matrix of travel distance between station pairs.
+	* Matrices of line-level empirical search information between line pairs with all/1/2/3 transfers.
 
 
 - TSI/[bj/sh/sz]\_[yyyy].pkl: the results of the theoretical search information calculated  from [Calculate the theoretical search information (TSI)](#calculate-the-theoretical-search-information-tsi). The file contains:
-	* a matrix of station-level theoretical search information values
-	* a matrix of number of subway lines on the fastest simplest path between station pairs
-	* a matrix of travel time of the fastest simplest path between station pairs
-	* a matrix of travel distance of the fastest simplest path between station pairs
-	* matrices of line-level theoretical search information between line pairs with all/1/2/3 transfers on the fastest simplest paths
+	* A matrix of station-level theoretical search information values.
+	* A matrix of number of subway lines on the fastest simplest path between station pairs.
+	* A matrix of travel time of the fastest simplest path between station pairs.
+	* A matrix of travel distance of the fastest simplest path between station pairs.
+	* Matrices of line-level theoretical search information between line pairs with all/1/2/3 transfers on the fastest simplest paths.
 
 	
 **Usage (Python 3.7)**
