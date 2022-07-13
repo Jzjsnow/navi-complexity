@@ -10,12 +10,12 @@ The complexity of navigation in cities has increased with the expansion of urban
 
 Data to replicate the results of the paper.
 
-### Smart card data
+### [Smart card data](https://github.com/Jzjsnow/navi-complexity/tree/main/data/smart_card_data)
 
 Smart card records in Beijing, Shanghai and Shenzhen. The datasets provide OD at the station level grouped by travel time (see [data prepoccessing](https://github.com/Jzjsnow/navi-complexity/blob/main/code/data_prepoccessing.sql) for details):
-- bj_2019.csv: Beijing subway in May 2019. [[Download]](https://drive.google.com/file/d/1bvmvDsBAu70z3hQmaPV03DwKE7N-YZuT/view?usp=sharing)
-- sh_2015.csv: Shanghai subway in April 2015. [[Download]](https://drive.google.com/file/d/1paTKWMMhFTNv4ech9u4IjCknbBKIWsTp/view?usp=sharing)
-- sz_2017.csv: Shenzhen subway in October 2017. [[Download]](https://drive.google.com/file/d/118K2ny2So78NbKgWLAuZ-wCoQBBG7-rZ/view?usp=sharing)
+- [bj_2019.csv](https://github.com/Jzjsnow/navi-complexity/blob/main/data/smart_card_data/bj_2019.csv): Beijing subway in May 2019.
+- [sh_2015.csv](https://github.com/Jzjsnow/navi-complexity/blob/main/data/smart_card_data/sh_2015.csv): Shanghai subway in April 2015.
+- [sz_2017.csv](https://github.com/Jzjsnow/navi-complexity/blob/main/data/smart_card_data/sz_2017.csv): Shenzhen subway in October 2017.
 
 |**Column**|**Definition**|**Data type**|
 | :- | :- | :-: |
