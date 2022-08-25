@@ -332,7 +332,7 @@ if __name__ == "__main__":
     df_records = tb.groupby(by = ['stationid_o','lineid_o','stationid_d','lineid_d']
                    ,as_index=False) \
                    .apply(lambda x : pd.Series([
-                   [x['d_time'].values[i]-Tconst  # subtract the access/egress delay in advance 
+                   [x['d_time'].values[i] * 60 - Tconst  # subtract the access/egress delay in advance 
                        for i in range(len(x))
                        for j in range(x['count'].values[i])
                    ]
@@ -354,7 +354,7 @@ if __name__ == "__main__":
     else:
         line_dict = {n[0]: [n[0]] for n in dualH_nodes} # for Shanghai, Shenzhen
 
-    buffer = 10
+    buffer = 600 # seconds
     matrix_matched_path = matching(
         H,
         kmax,
