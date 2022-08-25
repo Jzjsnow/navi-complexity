@@ -25,7 +25,7 @@ Smart card records in Beijing, Shanghai and Shenzhen. The datasets provide OD at
 |lineid_d|identication of the terminal subway line|int|
 |stationid_d|identication of the terminal subway station|int|
 |stationname_d|name of the terminal subway station|str|
-|d\_time|interval between the entry and exit timestamps (in seconds)|int|
+|d\_time|interval between the entry and exit timestamps (in minutes)|int|
 |count|number of trips with a *d_time* travel time between this station pair|int|
 
 	
