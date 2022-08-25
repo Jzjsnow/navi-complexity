@@ -13,9 +13,9 @@ Data to replicate the results of the paper.
 ### [Smart card data](https://github.com/Jzjsnow/navi-complexity/tree/main/data/smart_card_data)
 
 Smart card records in Beijing, Shanghai and Shenzhen. The datasets provide OD at the station level grouped by travel time (see [data prepoccessing](https://github.com/Jzjsnow/navi-complexity/blob/main/code/data_prepoccessing.sql) for details):
-- [bj_2019.csv](https://github.com/Jzjsnow/navi-complexity/blob/main/data/smart_card_data/bj_2019.csv): Beijing subway in May 2019.
-- [sh_2015.csv](https://github.com/Jzjsnow/navi-complexity/blob/main/data/smart_card_data/sh_2015.csv): Shanghai subway in April 2015.
-- [sz_2017.csv](https://github.com/Jzjsnow/navi-complexity/blob/main/data/smart_card_data/sz_2017.csv): Shenzhen subway in October 2017.
+- [bj_2019.csv](https://github.com/Jzjsnow/navi-complexity/blob/main/data/smart_card_data/bj_2019.csv.zip): Beijing subway in May 2019.
+- [sh_2015.csv](https://github.com/Jzjsnow/navi-complexity/blob/main/data/smart_card_data/sh_2015.csv.zip): Shanghai subway in April 2015.
+- [sz_2017.csv](https://github.com/Jzjsnow/navi-complexity/blob/main/data/smart_card_data/sz_2017.csv.zip): Shenzhen subway in October 2017.
 
 |**Column**|**Definition**|**Data type**|
 | :- | :- | :-: |
