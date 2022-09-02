@@ -4,6 +4,8 @@ Zhuojun Jiang, Lei Dong, Lun Wu, and Yu Liu
 ## Abstract
 The complexity of navigation in cities has increased with the expansion of urban areas, creating challenging transportation problems that drive many studies on the navigability of networks. However, due to the lack of individual mobility data, large-scale empirical analysis of the wayfinder's real-world navigation is rare. Here, using 225 million subway trips from three major cities in China, we quantify navigation difficulty from an information perspective. Our results reveal that 1) people conserve a small number of repeatedly used routes, and 2) the navigation information in the sub-networks formed by those routes is much smaller than the theoretical value in the global network, suggesting that the decision cost for actual trips is significantly smaller than the theoretical upper limit found in previous studies. By modeling routing behaviors in growing networks, we show that while the global network can become difficult to navigate, navigability can be improved in sub-networks. We further present a universal linear relationship between the empirical and theoretical search information, which allows the two metrics to predict each other. Our findings demonstrate how large-scale observations can quantify real-world navigation behaviors and aid in evaluating transportation planning.
 
+Cite: Zhuojun Jiang, Lei Dong, Lun Wu, Yu Liu, [Quantifying navigation complexity in transportation networks](https://academic.oup.com/pnasnexus/article/1/3/pgac126/6648719), PNAS Nexus, 1(3), 2022, pgac126.
+
 ***
 
 ## Data
